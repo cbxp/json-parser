@@ -17,11 +17,12 @@ We recommend to start with the simplest cases: plain number, plain string, array
 2. From command line: "./gradlew"
 
 ## Process
+0. Gather in teams of 2-4 people
 1. You create a branch from the `main` branch
 2. You commit every small change to this branch
 3. You will see results on https://github.com/cbxp/json-parser/actions
 4. We will periodically add new tests to the `main` branch
-
+5. After the deadline, you will present your algorithm
 
 
 Andrei & Anton
