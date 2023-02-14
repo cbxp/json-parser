@@ -13,5 +13,4 @@ public class JsonAssertions {
   static Reader file(String fileName) {
     return new InputStreamReader(JsonAssertions.class.getResourceAsStream('/' + fileName), UTF_8);
   }
-
 }

@@ -8,7 +8,6 @@ import java.util.List;
 import static com.codeborne.json.JsonAssertions.assertThat;
 import static com.codeborne.json.JsonAssertions.file;
 
-
 class JsonParserTest {
   private final JsonParser parser = new JsonParser();
 

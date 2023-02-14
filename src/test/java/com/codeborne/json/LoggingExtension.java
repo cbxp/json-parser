@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 public class LoggingExtension implements BeforeEachCallback, AfterEachCallback {
-
   @Override
   public void beforeEach(ExtensionContext context) {
     log("Before", context);
