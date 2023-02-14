@@ -8,7 +8,7 @@ class JsonParserTest {
   private final JsonParser parser = new JsonParser();
 
   @Test
-  void nulls() throws Exception {
+  void plainNull() throws Exception {
     assertThat(parser.parse("null")).isNull();
   }
 }
