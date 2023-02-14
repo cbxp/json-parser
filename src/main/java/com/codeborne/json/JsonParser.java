@@ -17,3 +17,15 @@ public class JsonParser {
     return null;
   }
 }
+
+/*
+Or in Kotlin:
+
+class JsonParser {
+  fun parse(input: String) = parse(StringReader(input))
+
+  fun parse(input: Reader): Any? {
+    TODO("implement me")
+  }
+}
+*/
