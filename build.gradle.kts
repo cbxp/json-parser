@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    kotlin("jvm") version "1.8.10"
 }
 
 group = "com.codeborne"
@@ -19,6 +20,13 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "11"
+        freeCompilerArgs += "-opt-in=kotlin.ExperimentalStdlibApi"
+    }
 }
 
 tasks.getByName<Test>("test") {
