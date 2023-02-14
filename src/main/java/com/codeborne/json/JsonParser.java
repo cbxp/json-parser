@@ -1,5 +1,7 @@
 package com.codeborne.json;
 
+import org.intellij.lang.annotations.Language;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -8,7 +10,7 @@ import java.io.StringReader;
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
  */
 public class JsonParser {
-  public Object parse(String input) throws IOException {
+  public Object parse(@Language("JSON") String input) throws IOException {
     return parse(new StringReader(input));
   }
 
@@ -22,7 +24,7 @@ public class JsonParser {
 Or in Kotlin:
 
 class JsonParser {
-  fun parse(input: String) = parse(StringReader(input))
+  fun parse(@Language("JSON") input: String) = parse(StringReader(input))
 
   fun parse(input: Reader): Any? {
     TODO("implement me")
