@@ -19,13 +19,13 @@ class JsonParserTest {
 
   @Test
   void string() throws IOException {
-    assertThat(parser.parse("\"tere\"")).isEqualTo("tere");
+    assertThat(parser.parse("\"Tänud, како да платам?\"")).isEqualTo("Tänud, како да платам?");
   }
 
   @Test
   void map() throws IOException {
     assertThat(parser.parse(file("map.json")))
-      .extractingFromJson("user", "firstName").isEqualTo("John");
+      .extractingFromJson("security", "password").isEqualTo("Паляниця");
   }
 
   @Test

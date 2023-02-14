@@ -1,5 +1,5 @@
 {
-  "user": {
-    "firstName": "John"
+  "security": {
+    "password": "Паляниця"
   }
 }
