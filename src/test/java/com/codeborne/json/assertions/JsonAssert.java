@@ -1,4 +1,4 @@
-package com.codeborne.json;
+package com.codeborne.json.assertions;
 
 import org.assertj.core.api.AbstractObjectAssert;
 

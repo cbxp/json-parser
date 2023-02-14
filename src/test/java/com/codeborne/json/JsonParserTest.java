@@ -2,7 +2,7 @@ package com.codeborne.json;
 
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.json.JsonAssertions.assertThat;
+import static com.codeborne.json.assertions.JsonAssertions.assertThat;
 
 class JsonParserTest {
   private final JsonParser parser = new JsonParser();

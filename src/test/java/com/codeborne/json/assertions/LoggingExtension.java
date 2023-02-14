@@ -1,4 +1,4 @@
-package com.codeborne.json;
+package com.codeborne.json.assertions;
 
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
