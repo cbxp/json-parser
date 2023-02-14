@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaProjectCodeInsightSettings">
+    <excluded-names>
+      <name>org.assertj.core.api.AssertionsForClassTypes</name>
+      <name>org.assertj.core.api.AssertionsForInterfaceTypes</name>
+      <name>org.assertj.core.api.ClassBasedNavigableIterableAssert</name>
+      <name>org.assertj.core.api.ClassBasedNavigableListAssert</name>
+      <name>org.assertj.core.api.FactoryBasedNavigableIterableAssert</name>
+      <name>org.assertj.core.api.FactoryBasedNavigableListAssert</name>
+      <name>org.assertj.core.api.Java6Assertions</name>
+      <name>org.junit.jupiter.api.Assertions</name>
+    </excluded-names>
+  </component>
+</project>
