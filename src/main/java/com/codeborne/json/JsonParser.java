@@ -29,6 +29,8 @@ public class JsonParser {
     switch (buffer) {
       case "": return null;
       case "null": return null;
+      case "true": return true;
+      case "false": return false;
       default:
           return Integer.valueOf(buffer);
     }

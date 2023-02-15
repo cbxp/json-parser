@@ -20,4 +20,12 @@ class JsonParserTest {
     assertThat(parser.parse("2 ")).isEqualTo(2);
     assertThat(parser.parse(" 3")).isEqualTo(3);
   }
+
+  @Test
+  void valueBoolean() throws IOException, JsonParseException {
+    assertThat(parser.parse("true")).isEqualTo(true);
+    assertThat(parser.parse("false")).isEqualTo(false);
+    assertThat(parser.parse(" false")).isEqualTo(false);
+    assertThat(parser.parse(" true ")).isEqualTo(true);
+  }
 }
