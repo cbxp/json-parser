@@ -40,6 +40,12 @@ public class JsonParser {
     private Map readMap(Reader input) throws IOException {
         HashMap<String, Object> result = new HashMap();
         input.read(); // curly bracket
+        readWhitespaces(input);
+
+        Character ch = peek(input);
+        if (ch == '}') {
+            return result;
+        }
 
         String key = readString(input);
 

@@ -38,4 +38,10 @@ class JsonParserTest {
     void basicMapWithBooleanField() throws Exception {
         assertThat(parser.parse("{\"field\": false}")).isEqualTo(Map.of("field", false));
     }
+
+    @Test
+    void basicMapWithEmptyMap() throws Exception {
+        assertThat(parser.parse("{}"))
+                .isEqualTo(Map.of());
+    }
 }
