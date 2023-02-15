@@ -41,6 +41,9 @@ public class JsonParser {
     }
     switch (buffer) {
       case "":
+        if (isString) {
+          return "";
+        }
         return null;
       case "null":
         return null;
