@@ -33,13 +33,18 @@ public class JsonParser {
     }
   }
 
-  private String unescape(String value) {
+  private String unescape(String value) throws JsonParseException {
     StringBuilder result = new StringBuilder();
     char[] chars = value.toCharArray();
     for (int i = 0; i < value.toCharArray().length; i++) {
       char c = chars[i];
       if (c == '\\') {
-        result.append(chars[++i]);
+        try {
+          result.append(chars[i+1]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+          throw new JsonParseException("Incorrect symbol following \\", -1);
+        }
+        i++;
         continue;
       }
       result.append(c);

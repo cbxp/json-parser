@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static com.codeborne.json.assertions.JsonAssertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class JsonParserTest {
   private final JsonParser parser = new JsonParser();
@@ -34,9 +35,15 @@ class JsonParserTest {
     assertThat(parser.parse("\"\\\"\"")).isEqualTo("\"");
   }
   @Test
-
   void plainString_reverseSolidus() throws IOException, JsonParseException {
     assertThat(parser.parse("\"\\\\\"")).isEqualTo("\\");
+  }
+
+  @Test
+  void plainString_invalidEscaping() throws IOException, JsonParseException {
+    assertThatThrownBy(() -> parser.parse("\"\\\""))
+        .isInstanceOf(JsonParseException.class)
+        .hasMessage("Incorrect symbol following \\");
   }
 
   @Test
