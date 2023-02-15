@@ -32,6 +32,13 @@ public class JsonParser {
         } catch (NumberFormatException e) {
             // do nothing
         }
+
+        if (s.equalsIgnoreCase("true")) {
+            return true;
+        }
+        if (s.equalsIgnoreCase("false")) {
+            return false;
+        }
         return s;
     }
 }
