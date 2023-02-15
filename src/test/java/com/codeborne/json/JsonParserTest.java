@@ -69,4 +69,16 @@ class JsonParserTest {
         assertThat(parser.parse("[1, 2, 3]"))
                 .isEqualTo(List.of(1, 2, 3));
     }
+
+    @Test
+    void basicStringArray() throws Exception {
+        assertThat(parser.parse("[\"1\", \"2\", \"3\"]"))
+                .isEqualTo(List.of("1", "2", "3"));
+    }
+
+    @Test
+    void basicObjectsArray() throws Exception {
+        assertThat(parser.parse("[{\"a\":  1}, {\"b\":  \"2\"}]"))
+                .isEqualTo(List.of(Map.of("a", 1), Map.of("b", "2")));
+    }
 }

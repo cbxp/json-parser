@@ -58,6 +58,7 @@ public class JsonParser {
             }
         } while (isComma);
 
+        input.read(); // end curly
         return result;
     }
 
@@ -84,6 +85,7 @@ public class JsonParser {
             if (Objects.equals(ch, ',')) {
                 isComma = true;
                 input.read();
+                readWhitespaces(input);
             } else {
                 isComma = false;
             }
