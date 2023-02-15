@@ -19,15 +19,3 @@ public class JsonParser {
     return null;
   }
 }
-
-/*
-JsonParser.kt, or use Ctrl+Shift+Alt+K to convert
-
-class JsonParser {
-  fun parse(@Language("JSON") input: String) = parse(StringReader(input))
-
-  fun parse(input: Reader): Any? {
-    TODO("implement me")
-  }
-}
-*/
