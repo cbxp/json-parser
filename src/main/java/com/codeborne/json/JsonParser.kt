@@ -15,16 +15,22 @@ class JsonParser {
     fun parse(input: Reader?): Any? {
         return input?.let {
             val text = it.readText()
-            if (text == "null") return null
-            if (text.isNumeric()) return text.toInt()
-            if (text.isBoolean()) return text.toBoolean()
-            return text.replace("\"", "")
+            when {
+                text == "null" -> return null
+                text.isInt() -> return text.toInt()
+                text.isLong() -> return text.toLong()
+                text.isDouble() -> return text.toDouble()
+                text.isBoolean() -> return text.toBoolean()
+                else -> return text.replace("\"", "")
+            }
         }
     }
 
-    private fun String.isNumeric() = this.all {
-        it.isDigit()
-    }
+    private fun String.isInt() = this.toIntOrNull() != null
+
+    private fun String.isLong() = this.toLongOrNull() != null
+
+    private fun String.isDouble() = this.toDoubleOrNull() != null
 
     private fun String.isBoolean() = this == "false" || this == "true"
 }
