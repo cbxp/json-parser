@@ -20,6 +20,16 @@ public class JsonParser {
     return parse(new StringReader(input));
   }
 
+  private void parseColon(JsonScanner scanner) throws IOException {
+    if(!scanner.hasNext()) {
+      throw new RuntimeException("Unexpected end of JSON");
+    }
+    var token = scanner.scan();
+    if (!":".equals(token)) {
+      throw new RuntimeException("Colon expected: " + token);
+    }
+  }
+
   private List<Object> parseList(JsonScanner scanner) throws IOException {
     List<Object> result = new ArrayList<>();
     while (scanner.hasNext()) {
@@ -37,6 +47,15 @@ public class JsonParser {
       var token = scanner.scan();
       if ("}".equals(token)) {
         return result;
+      }
+      if (",".equals(token)) {
+        continue;
+      }
+      if (token.startsWith("\"") && token.endsWith("\"")) {
+        var key = token.substring(1, token.length() - 1);
+        parseColon(scanner);
+        var value = parse(scanner);
+        result.put(key, value);
       }
     }
     throw new RuntimeException("Unexpected end of JSON");
