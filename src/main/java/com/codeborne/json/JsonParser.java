@@ -15,8 +15,23 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    // TODO implement me
-    return null;
+    int value = -1;
+    String buffer = "";
+    while ((value = input.read()) != -1) {
+      switch (value) {
+        case 32:
+          break;
+        default:
+          buffer = buffer + (char) value;
+      }
+      System.out.println("read = " + value);
+    }
+    switch (buffer) {
+      case "": return null;
+      case "null": return null;
+      default:
+          return Integer.valueOf(buffer);
+    }
   }
 }
 
