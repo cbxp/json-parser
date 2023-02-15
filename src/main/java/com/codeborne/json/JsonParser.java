@@ -5,10 +5,7 @@ import org.intellij.lang.annotations.Language;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static java.lang.Character.isWhitespace;
 
@@ -64,6 +61,19 @@ public class JsonParser {
         return result;
     }
 
+    private List<Object> readArray(Reader input) throws IOException {
+        input.read(); //square bracket
+        ArrayList<Object> result = new ArrayList<>();
+
+        Character character = peek(input);
+        if (character == ']') {
+            input.read();
+            return result;
+        }
+
+        return result;
+    }
+
     private Pair readKeyAndValue(Reader input) throws IOException {
         String key = readString(input);
 
@@ -83,6 +93,8 @@ public class JsonParser {
             return readString(input);
         } else if (ch == '{') {
             return readMap(input);
+        } else if (ch == '[') {
+            return readArray(input);
         } else {
             List<Character> untilChars = List.of('}', ',', '\n', '\r');
 

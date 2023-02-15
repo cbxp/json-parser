@@ -2,6 +2,7 @@ package com.codeborne.json;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.codeborne.json.assertions.JsonAssertions.assertThat;
@@ -55,5 +56,11 @@ class JsonParserTest {
     void basicMapWithNestedKeys() throws Exception {
         assertThat(parser.parse("{\"foo\": {\"bar\":  123}}"))
                 .isEqualTo(Map.of("foo", Map.of("bar", 123)));
+    }
+
+    @Test
+    void basicEmptyArray() throws Exception {
+        assertThat(parser.parse("[]"))
+                .isEqualTo(List.of());
     }
 }
