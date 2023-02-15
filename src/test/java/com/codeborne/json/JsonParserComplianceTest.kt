@@ -55,4 +55,26 @@ class JsonParserComplianceTest {
   @Test fun `basic object`() {
     assertThat(parser.parse("""{"Hello": "World"}""")).isEqualTo(mapOf("Hello" to "World"))
   }
+
+  // Advanced
+
+  @Test fun `extra whitespace`() {
+    assertThat(parser.parse("  \n\rtrue  \r\n\r\n")).isEqualTo(true)
+  }
+
+  @Test fun `escaped strings`() {
+    assertThat(parser.parse("\"Hello\\nМир\\r\"")).isEqualTo("Hello\nМир\r")
+  }
+
+  @Test fun `unicode escaping`() {
+    assertThat(parser.parse("\"No\\u00A0breaking\"")).isEqualTo("No\u00A0breaking")
+  }
+
+  @Test fun `double with e`() {
+    assertThat(parser.parse("1e100")).isEqualTo(1e100)
+  }
+
+  @Test fun `unary plus`() {
+    assertThat(parser.parse("+123")).isEqualTo(123)
+  }
 }
