@@ -12,6 +12,7 @@ import org.intellij.lang.annotations.Language;
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
  */
 public class JsonParser {
+
   private static final List<Parser> PARSERS = List.of(new NullParser(), new BooleanParser(), new NumberParser(), new StringParser());
 
   public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
@@ -28,7 +29,7 @@ public class JsonParser {
 
       for (Parser parser : PARSERS) {
         if (parser.couldBe(character)) {
-      bufferedReader.reset();
+          bufferedReader.reset();
           return parser.parse(bufferedReader);
         }
       }
@@ -43,4 +44,5 @@ public class JsonParser {
   private boolean isWhitespace(int chr) {
     return Character.isWhitespace(chr);
   }
+
 }
