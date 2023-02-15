@@ -16,4 +16,10 @@ class JsonParserTest {
   void valueString() throws Exception {
     assertThat(parser.parse("abc")).isEqualTo("abc");
   }
+  @Test
+  void valueNumber() throws Exception { // negative, positive larger than int, larger than long... maybe use BigDecimal
+    assertThat(parser.parse("123")).isEqualTo(123);
+    assertThat(parser.parse("-123")).isEqualTo(-123);
+    assertThat(parser.parse("0")).isEqualTo(0);
+  }
 }

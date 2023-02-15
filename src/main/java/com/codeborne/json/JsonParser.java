@@ -14,7 +14,7 @@ public class JsonParser {
         return parse(new StringReader(input));
     }
 
-    public Object parse(Reader input) throws IOException, JsonParseException {
+    public Object parse(Reader input) throws IOException {
         StringBuffer buffer = new StringBuffer();
         while (true) {
             int character = input.read();
@@ -26,6 +26,11 @@ public class JsonParser {
         String s = buffer.toString();
         if (s.equals("null")) {
             return null;
+        }
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            // do nothing
         }
         return s;
     }
