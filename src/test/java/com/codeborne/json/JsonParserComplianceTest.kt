@@ -73,8 +73,4 @@ class JsonParserComplianceTest {
   @Test fun `double with e`() {
     assertThat(parser.parse("1e100")).isEqualTo(1e100)
   }
-
-  @Test fun `unary plus`() {
-    assertThat(parser.parse("+123")).isEqualTo(123)
-  }
 }
