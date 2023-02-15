@@ -21,7 +21,10 @@ class JsonParser {
 
     @Throws(IOException::class, JsonParseException::class)
     fun parse(input: Reader?): Any? {
-        // TODO implement me
-        return null
+        return input?.let {
+            val text = it.readText()
+            if (text == "null") return null
+            text.toBoolean()
+        }
     }
 }
