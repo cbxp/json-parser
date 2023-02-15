@@ -29,6 +29,8 @@ public class JsonParser {
         return parseNull(bufferedReader);
       } else if (couldBeBoolean(character)) {
         return parseBoolean(bufferedReader);
+      } else if (couldBeNumber(character)) {
+        return parseNumber(bufferedReader);
       }
       throw new JsonParseException("Not yet implemented", -1);
     }
@@ -66,5 +68,22 @@ public class JsonParser {
       return false;
     }
     throw new JsonParseException("Unknown value %s".formatted(value), -1);
+  }
+
+  private boolean couldBeNumber(int character) {
+    return character == '-' || Character.isDigit(character);
+  }
+
+  private Object parseNumber(BufferedReader reader) {
+    String value = reader.lines().collect(Collectors.joining());
+    if (value.contains(".")) {
+      return Double.parseDouble(value);
+    } else {
+      try {
+        return Integer.parseInt(value);
+      } catch (NumberFormatException e) {
+        return Long.parseLong(value);
+      }
+    }
   }
 }
