@@ -94,6 +94,9 @@ public class JsonParser {
             case "number":
                 return numberValue(valueBuffer.toString());
             case "string":
+                if (valueBuffer.length() < 3) {
+                    return "";
+                }
                 return valueBuffer.toString().substring(1, valueBuffer.length() - 2);
             case "array":
                 return List.of();
