@@ -34,7 +34,17 @@ public class JsonParser {
   }
 
   private String unescape(String value) {
-    return value.replaceAll("\\\\\"", "\"");
+    StringBuilder result = new StringBuilder();
+    char[] chars = value.toCharArray();
+    for (int i = 0; i < value.toCharArray().length; i++) {
+      char c = chars[i];
+      if (c == '\\') {
+        result.append(chars[++i]);
+        continue;
+      }
+      result.append(c);
+    };
+    return result.toString();
   }
 }
 
