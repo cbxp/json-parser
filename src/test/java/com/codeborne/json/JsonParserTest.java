@@ -16,4 +16,9 @@ class JsonParserTest {
     void basicStringField() throws Exception {
         assertThat(parser.parse("\"field\"")).isEqualTo("field");
     }
+
+    @Test
+    void basicStringNumber() throws Exception {
+        assertThat(parser.parse("2")).isEqualTo(2);
+    }
 }
