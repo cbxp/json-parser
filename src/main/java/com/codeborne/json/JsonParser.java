@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import org.intellij.lang.annotations.Language;
 
@@ -12,6 +12,7 @@ import org.intellij.lang.annotations.Language;
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
  */
 public class JsonParser {
+  private static final List<Parser> PARSERS = List.of(new NullParser(), new BooleanParser(), new NumberParser(), new StringParser());
 
   public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
     return parse(new StringReader(input));
@@ -25,15 +26,11 @@ public class JsonParser {
         throw new JsonParseException("Empty string", 0);
       }
 
+      for (Parser parser : PARSERS) {
+        if (parser.couldBe(character)) {
       bufferedReader.reset();
-      if (couldBeNull(character)) {
-        return parseNull(bufferedReader);
-      } else if (couldBeBoolean(character)) {
-        return parseBoolean(bufferedReader);
-      } else if (couldBeNumber(character)) {
-        return parseNumber(bufferedReader);
-      } else if (couldBeString(character)) {
-        return parseString(bufferedReader);
+          return parser.parse(bufferedReader);
+        }
       }
       throw new JsonParseException("Not yet implemented", -1);
     }
@@ -46,76 +43,4 @@ public class JsonParser {
   private boolean isWhitespace(int chr) {
     return Character.isWhitespace(chr);
   }
-
-  private boolean couldBeNull(int character) {
-    return character == 'n';
-  }
-
-  private Object parseNull(BufferedReader reader) throws JsonParseException {
-    String value = reader.lines().collect(Collectors.joining());
-    if ("null".equals(value)) {
-      return null;
-    }
-    throw new JsonParseException("Unknown value %s".formatted(value), -1);
-  }
-
-  private boolean couldBeBoolean(int character) {
-    return character == 't' || character == 'f';
-  }
-
-  private Object parseBoolean(BufferedReader reader) throws JsonParseException {
-    String value = reader.lines().collect(Collectors.joining());
-    if ("true".equals(value)) {
-      return true;
-    } else if ("false".equals(value)) {
-      return false;
-    }
-    throw new JsonParseException("Unknown value %s".formatted(value), -1);
-  }
-
-  private boolean couldBeString(int chr) {
-    return chr == '"';
-  }
-
-  private String parseString(BufferedReader bufferedReader) throws IOException {
-    StringBuilder builder = new StringBuilder();
-    boolean firstQuotation = true;
-    while (true) {
-      int character = bufferedReader.read();
-
-      if (character == -1) {
-        break;
-      }
-
-      if (character == '"') {
-        if (firstQuotation) {
-          firstQuotation = false;
-        } else {
-          break;
-        }
-      } else {
-        builder.append(Character.toString(character));
-      }
-
-    }
-    return builder.toString();
-  }
-
-  private boolean couldBeNumber(int character) {
-    return character == '-' || Character.isDigit(character);
-  }
-
-  private Object parseNumber(BufferedReader reader) {
-    String value = reader.lines().collect(Collectors.joining());
-    if (value.contains(".")) {
-      return Double.parseDouble(value);
-    } else {
-      try {
-        return Integer.parseInt(value);
-      } catch (NumberFormatException e) {
-        return Long.parseLong(value);
-      }
-    }
-  }
-
 }
