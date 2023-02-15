@@ -16,7 +16,7 @@ public class JsonParser {
 
   public Object parse(Reader input) throws IOException, JsonParseException {
     var buf = new StringBuilder();
-    while (true){
+    while (true) {
       var nextChars = input.read();
       if (nextChars == -1) {
         break;
