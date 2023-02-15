@@ -25,14 +25,7 @@ public class JsonParser {
         Character ch = peek(input);
 
         if (ch != null) {
-            if (ch == '{') {
-                result = readMap(input);
-                // TODO
-            } else if (ch == '[') {
-                // TODO
-            } else {
-                result = readValue(input);
-            }
+            result = readValue(input);
         }
 
         return result;
@@ -88,6 +81,8 @@ public class JsonParser {
 
         if (ch == '"') {
             return readString(input);
+        } else if (ch == '{') {
+            return readMap(input);
         } else {
             List<Character> untilChars = List.of('}', ',', '\n', '\r');
 

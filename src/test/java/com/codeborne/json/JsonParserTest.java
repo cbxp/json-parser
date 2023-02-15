@@ -50,4 +50,10 @@ class JsonParserTest {
         assertThat(parser.parse("{\"foo\": 123, \"bar\": \"value\"}"))
                 .isEqualTo(Map.of("foo", 123, "bar", "value"));
     }
+
+    @Test
+    void basicMapWithNestedKeys() throws Exception {
+        assertThat(parser.parse("{\"foo\": {\"bar\":  123}}"))
+                .isEqualTo(Map.of("foo", Map.of("bar", 123)));
+    }
 }
