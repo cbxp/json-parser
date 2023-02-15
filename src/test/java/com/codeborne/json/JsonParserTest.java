@@ -18,6 +18,9 @@ class JsonParserTest {
         assertThat(parser.parse("""
                  "abc"
                 """)).isEqualTo("abc");
+        assertThat(parser.parse("""
+                 " abc zoo "
+                """)).isEqualTo(" abc zoo ");
     }
 
     @Test
@@ -39,10 +42,11 @@ class JsonParserTest {
     }
 
     @Test
-    @Disabled
     void ignoresSurroundingWhitespaces() throws Exception {
         assertThat(parser.parse("true ")).isEqualTo(true);
         assertThat(parser.parse(" 123")).isEqualTo(123);
-        assertThat(parser.parse(" abc   ")).isEqualTo("abc");
+        assertThat(parser.parse("""
+                  "abc "
+                """)).isEqualTo("abc ");
     }
 }

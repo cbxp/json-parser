@@ -28,7 +28,11 @@ public class JsonParser {
             }
             if (isWhiteSpace(character)) {
                 if (readingValue) {
-                    readingValue = false;
+                    if (valueType.equals("string")) {
+                        valueBuffer.append((char) character);
+                    } else {
+                        readingValue = false;
+                    }
                 }
             } else {
                 if (readingValue) {
