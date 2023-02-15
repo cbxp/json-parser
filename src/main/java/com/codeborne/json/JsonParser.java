@@ -2,7 +2,6 @@ package com.codeborne.json;
 
 import org.intellij.lang.annotations.Language;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -27,11 +26,11 @@ public class JsonParser {
           buffer = buffer + String.valueOf(Character.toChars(input.read()));
           break;
         case "\"":
-            isString = true;
-            break;
+          isString = true;
+          break;
         case " ":
           if (!isString) break;
-        case  ".":
+        case ".":
           isDouble = true;
         default:
           buffer = buffer + stringValue;
@@ -56,7 +55,12 @@ public class JsonParser {
         if (isDouble) {
           return Double.valueOf(buffer);
         } else {
-          return Integer.valueOf(buffer);
+          Long aLong = Long.parseLong(buffer);
+          if (aLong > (long)Integer.MAX_VALUE) {
+            return aLong;
+          } else {
+            return aLong.intValue();
+          }
         }
     }
   }
