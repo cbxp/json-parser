@@ -5,8 +5,6 @@ import org.intellij.lang.annotations.Language;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -28,10 +26,17 @@ public class JsonParser {
 
     var token = buf.toString();
 
-    if (token.equals("null")) {
+    if ("null".equals(token)) {
       return null;
     }
 
+    if ("true".equals(token)) {
+      return true;
+    }
+
+    if ("false".equals(token)) {
+      return false;
+    }
 
     if (token.startsWith("\"") && token.endsWith("\"")) {
       return token.substring(1, token.length() - 1);
