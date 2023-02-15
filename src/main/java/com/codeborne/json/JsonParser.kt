@@ -15,6 +15,11 @@ class JsonParser {
     }
 
     @Throws(IOException::class, JsonParseException::class)
+    fun parse(@Language("JSON") input: Int?): Any? {
+        return input
+    }
+
+    @Throws(IOException::class, JsonParseException::class)
     fun parse(input: Reader?): Any? {
         // TODO implement me
         return null
