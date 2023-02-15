@@ -33,4 +33,9 @@ class JsonParserTest {
     void basicMapWithNumberField() throws Exception {
         assertThat(parser.parse("{\"field\": 123}")).isEqualTo(Map.of("field", 123));
     }
+
+    @Test
+    void basicMapWithBooleanField() throws Exception {
+        assertThat(parser.parse("{\"field\": false}")).isEqualTo(Map.of("field", false));
+    }
 }
