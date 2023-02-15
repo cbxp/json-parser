@@ -129,7 +129,11 @@ public class JsonParser {
                 if (string.contains(".")) {
                     return Double.valueOf(string);
                 } else {
-                    return Integer.valueOf(string);
+                    try {
+                        return Integer.valueOf(string);
+                    } catch (NumberFormatException e) {
+                        return Long.valueOf(string);
+                    }
                 }
             }
         }
