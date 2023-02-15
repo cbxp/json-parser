@@ -89,13 +89,29 @@ public class JsonParser {
   private static String readEscaped(Reader input) throws IOException {
     String value = String.valueOf(Character.toChars(input.read()));
     switch (value) {
-      case "n": return "\n";
-      case "t": return "\t";
-      case "b": return "\b";
-      case "r": return "\r";
-      case "f": return "\f";
-      default: return value;
+      case "n":
+        return "\n";
+      case "t":
+        return "\t";
+      case "b":
+        return "\b";
+      case "r":
+        return "\r";
+      case "f":
+        return "\f";
+      case "u":
+        return readUnicode(input);
+      default:
+        return value;
     }
+  }
+
+  private static String readUnicode(Reader input) throws IOException {
+    StringBuilder buffer = new StringBuilder("0x");
+    for (int i = 0; i < 4; i++) {
+      buffer.append(String.valueOf(Character.toChars(input.read())));
+    }
+    return String.valueOf(Character.toChars(Integer.decode(buffer.toString())));
   }
 
   private static Map<String, Object> readObject(Reader input) throws IOException {
