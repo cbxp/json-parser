@@ -1,12 +1,12 @@
 package com.codeborne.json;
 
-import com.google.gson.Gson;
 import org.intellij.lang.annotations.Language;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+
+import static com.codeborne.json.GsonConfig.getGson;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -17,7 +17,7 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    return new Gson().fromJson(input, Object.class);
+    return getGson().fromJson(input, Object.class);
   }
 }
 
