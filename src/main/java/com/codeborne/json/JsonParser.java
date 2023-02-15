@@ -2,6 +2,7 @@ package com.codeborne.json;
 
 import org.intellij.lang.annotations.Language;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -15,19 +16,21 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    // TODO implement me
-    return null;
+    BufferedReader bufferedReader = new BufferedReader(input);
+    String line;
+    StringBuilder result = new StringBuilder();
+    while ((line = bufferedReader.readLine()) != null) {
+      result.append(line);
+    }
+    String string = result.toString();
+    System.out.println(string);
+
+    switch (string) {
+      case "null":
+        return null;
+      default:
+        return Boolean.parseBoolean(string);
+    }
+
   }
 }
-
-/*
-JsonParser.kt, or use Ctrl+Shift+Alt+K to convert
-
-class JsonParser {
-  fun parse(@Language("JSON") input: String) = parse(StringReader(input))
-
-  fun parse(input: Reader): Any? {
-    TODO("implement me")
-  }
-}
-*/
