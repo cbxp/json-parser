@@ -13,20 +13,41 @@ public class JsonTokenizer {
     reader = new PushbackReader(r);
   }
 
+  private char nextSymbol(boolean endOfFileAllowed) {
+    int result = 0;
+    try {
+      result = reader.read();
+      if (result == -1) {
+        throw endOfFileAllowed ? new EndOfFile() : new UnexpectedEndOfFile();
+      }
+      return (char) result;
+    } catch (IOException e) {
+      throw new UnexpectedEndOfFile();
+    }
+  }
+
   public JsonToken nextToken() {
     try {
-      int result = reader.read();
-      if (result == -1) return null;
-      char symbol = (char) result;
+      char symbol = nextSymbol(true);
 
       if (symbol == '{') return new JsonToken(TokenType.OBJ_START);
       if (symbol == '}') return new JsonToken(TokenType.OBJ_CLOSING);
       if (symbol == ':') return new JsonToken(TokenType.COLON);
 
+      if (symbol == '"') {
+        StringBuffer buffer = new StringBuffer();
+        while (true) {
+          symbol = nextSymbol(false);
+          if (symbol == '"') {
+            return new JsonToken(TokenType.VALUE, buffer.toString());
+          }
+          buffer.append(symbol);
+        }
+      }
 
       return null;
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    } catch (EndOfFile e) {
+      return null;
     }
   }
 
@@ -60,4 +81,7 @@ public class JsonTokenizer {
       this.value = null;
     }
   }
+
+  protected static class EndOfFile extends RuntimeException {}
+  protected static class UnexpectedEndOfFile extends RuntimeException {}
 }
