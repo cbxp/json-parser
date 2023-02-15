@@ -7,20 +7,14 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
  */
 public class JsonParser {
-  public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
-    return parse(new StringReader(input));
-  }
-
-  public Object parse(Reader input) throws IOException, JsonParseException {
-    return readValue(input);
-  }
-
   @Nullable
   private static Object readValue(Reader input) throws IOException {
     int value;
@@ -31,8 +25,12 @@ public class JsonParser {
     while ((value = input.read()) != -1) {
       String stringValue = String.valueOf(Character.toChars(value));
       switch (stringValue) {
+        case "{":
+          return readObject(input);
         case "[":
           return readArray(input);
+        case ":":
+        case "}":
         case "]":
         case ",":
           if (!isString) {
@@ -44,6 +42,7 @@ public class JsonParser {
           buffer = buffer + String.valueOf(Character.toChars(input.read()));
           break;
         case "\"":
+          if (isString) exit = true;
           isString = true;
           break;
         case " ":
@@ -73,13 +72,30 @@ public class JsonParser {
           return Double.valueOf(buffer);
         } else {
           Long aLong = Long.parseLong(buffer);
-          if (aLong > (long)Integer.MAX_VALUE) {
+          if (aLong > (long) Integer.MAX_VALUE) {
             return aLong;
           } else {
             return aLong.intValue();
           }
         }
     }
+  }
+
+  private static Map<String, Object> readObject(Reader input) throws IOException {
+    Map<String, Object> o = new HashMap<>();
+    Map<String, Object> v;
+    while ((v = readKeyValue(input)) != null) {
+      o.putAll(v);
+    }
+    return o;
+  }
+
+  private static Map<String, Object> readKeyValue(Reader input) throws IOException {
+    var key = (String)readValue(input);
+    readValue(input);
+    var value = readValue(input);
+    if (key == null) return null;
+    return Map.of(key, value);
   }
 
   private static List<Object> readArray(Reader input) throws IOException {
@@ -89,6 +105,14 @@ public class JsonParser {
       objects.add(v);
     }
     return objects;
+  }
+
+  public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
+    return parse(new StringReader(input));
+  }
+
+  public Object parse(Reader input) throws IOException, JsonParseException {
+    return readValue(input);
   }
 }
 
