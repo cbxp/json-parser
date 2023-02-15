@@ -43,7 +43,7 @@ class JsonParserTest {
   void plainString_invalidEscaping() throws IOException, JsonParseException {
     assertThatThrownBy(() -> parser.parse("\"\\\""))
         .isInstanceOf(JsonParseException.class)
-        .hasMessage("Incorrect symbol following \\");
+        .hasMessage("Incorrect escaping syntax following \\");
   }
 
   @Test

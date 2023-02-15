@@ -42,7 +42,7 @@ public class JsonParser {
         try {
           result.append(chars[i+1]);
         } catch (ArrayIndexOutOfBoundsException e) {
-          throw new JsonParseException("Incorrect symbol following \\", -1);
+          throw new JsonParseException("Incorrect escaping syntax following \\", -1);
         }
         i++;
         continue;
