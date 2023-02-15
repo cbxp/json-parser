@@ -5,10 +5,15 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.json.assertions.JsonAssertions.assertThat;
 
 class JsonParserTest {
-  private final JsonParser parser = new JsonParser();
+    private final JsonParser parser = new JsonParser();
 
-  @Test
-  void plainNull() throws Exception {
-    assertThat(parser.parse("null")).isNull();
-  }
+    @Test
+    void plainNull() throws Exception {
+        assertThat(parser.parse("null")).isNull();
+    }
+
+    @Test
+    void basicStringField() throws Exception {
+        assertThat(parser.parse("\"field\"")).isEqualTo("field");
+    }
 }
