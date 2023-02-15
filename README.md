@@ -6,7 +6,9 @@ Technical exercise for practicing TDD and programming skills
 You need to write a JSON parser
 
 ### Given
-You have given an empty implementation: JsonParser.java and a bunch of simple tests: JsonParserTest.java
+You have given an empty implementation: JsonParser and a bunch of simple tests: JsonParserTest
+
+You can use Ctrl+Alt+Shift+K to convert them to Kotlin, if you like.
 
 ### Goal
 You need to implement JsonParser to support as many [JSON features as possible](https://www.json.org/json-en.html).

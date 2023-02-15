@@ -1,10 +1,10 @@
-package com.codeborne.json;
+package com.codeborne.json.assertions;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static com.codeborne.json.JsonAssertions.assertThat;
+import static com.codeborne.json.assertions.JsonAssertions.assertThat;
 
 class JsonAssertTest {
   @Test

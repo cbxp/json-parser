@@ -13,7 +13,7 @@ public class HugeJsonTest {
 
   @Test
   @SuppressWarnings("unchecked")
-  void hugeJson() throws IOException {
+  void hugeJson() throws IOException, JsonParseException {
     Object json = parser.parse(new BufferedReader(new ContentGenerator("\"Türi\\\"Jõri\"", 3_000_000)));
     assertThat(json).isInstanceOf(List.class);
     assertThat((List<?>) json).hasSize(230770);

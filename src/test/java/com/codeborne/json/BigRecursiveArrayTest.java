@@ -6,14 +6,14 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static com.codeborne.json.JsonAssertions.file;
+import static com.codeborne.json.assertions.JsonAssertions.file;
 
 
 public class BigRecursiveArrayTest {
   private final JsonParser parser = new JsonParser();
 
   @Test
-  void hugeJson() throws IOException {
+  void hugeJson() throws IOException, JsonParseException {
     Object json = parser.parse(file("big-recursive-array.json"));
     for (int i = 0; i < 4932; i++) {
       assertThat(json).isInstanceOf(List.class);

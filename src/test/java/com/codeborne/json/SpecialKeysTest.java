@@ -5,15 +5,15 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static com.codeborne.json.JsonAssertions.assertThat;
-import static com.codeborne.json.JsonAssertions.file;
+import static com.codeborne.json.assertions.JsonAssertions.assertThat;
+import static com.codeborne.json.assertions.JsonAssertions.file;
 
 public class SpecialKeysTest {
   private final JsonParser parser = new JsonParser();
 
 
   @Test
-  void specialKeys() throws IOException {
+  void specialKeys() throws IOException, JsonParseException {
     Object json = parser.parse(file("special-keys.json"));
     assertThat(json).extractingFromJson("foo").isEqualTo(List.of("bar", "baz"));
     assertThat(json).extractingFromJson("").isEqualTo(0);

@@ -1,11 +1,10 @@
-package com.codeborne.json;
+package com.codeborne.json.assertions;
 
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 public class LoggingExtension implements BeforeEachCallback, AfterEachCallback {
-
   @Override
   public void beforeEach(ExtensionContext context) {
     log("Before", context);

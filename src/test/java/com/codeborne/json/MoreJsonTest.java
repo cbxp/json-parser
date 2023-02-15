@@ -6,15 +6,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.codeborne.json.JsonAssertions.assertThat;
-import static com.codeborne.json.JsonAssertions.file;
+import static com.codeborne.json.assertions.JsonAssertions.assertThat;
+import static com.codeborne.json.assertions.JsonAssertions.file;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MoreJsonTest {
   private final JsonParser parser = new JsonParser();
 
   @Test
-  void bigDecimal() throws IOException {
+  void bigDecimal() throws IOException, JsonParseException {
     assertThat(parser.parse("123.456789")).isEqualTo(new BigDecimal("123.456789"));
   }
 
@@ -27,14 +27,14 @@ public class MoreJsonTest {
 
 
   @Test
-  void sample1() throws IOException {
+  void sample1() throws IOException, JsonParseException {
     Object json = parser.parse(file("sample1.json"));
     assertThat(json).extractingFromJson("clinical_study", "last_update_submitted_qc")
       .isEqualTo("September 10, 2019");
   }
 
   @Test
-  void sample2() throws IOException {
+  void sample2() throws IOException, JsonParseException {
     Object json = parser.parse(file("sample2.json"));
     assertThat(json).extractingFromJson("success").isEqualTo(true);
     assertThat(json).extractingFromJson("error").isNull();
@@ -43,7 +43,7 @@ public class MoreJsonTest {
   }
 
   @Test
-  void sample3() throws IOException {
+  void sample3() throws IOException, JsonParseException {
     Object json = parser.parse(file("sample3.json"));
     assertThat(json).extractingFromJson("name", "first").isEqualTo("Tom");
     assertThat(json).extractingFromJson("name", "last").isEqualTo("La'Cruise");
@@ -56,7 +56,7 @@ public class MoreJsonTest {
   }
 
   @Test
-  void floats() throws IOException {
+  void floats() throws IOException, JsonParseException {
     Object json = parser.parse(file("floats-755.json"));
     assertThat(json).isInstanceOf(List.class);
     List<?> list = (List<?>) json;
