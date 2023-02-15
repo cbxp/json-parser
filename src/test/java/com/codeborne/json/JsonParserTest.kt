@@ -7,7 +7,6 @@ class JsonParserTest {
     private val parser = JsonParser()
 
     @Test
-    @Throws(Exception::class)
     fun `plain null`() {
         JsonAssertions.assertThat(parser.parse("null")).isNull()
     }

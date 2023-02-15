@@ -14,16 +14,18 @@ class JsonParser {
 
     fun parse(input: Reader?): Any? {
         return input?.let {
-            val text = it.readText().trim()
+            val rawText = it.readText()
+            if (rawText.isEmpty()) throw IllegalArgumentException("Invalid json: \"$rawText\"")
+            val text = rawText.unescape()
             when {
                 text == "null" -> return null
                 text.isInt() -> return text.toInt()
                 text.isLong() -> return text.toLong()
-                text.isDouble() -> return text.toDouble()
+                text.isBigDecimal() -> return text.toBigDecimal()
                 text.isBoolean() -> return text.toBoolean()
                 text.isList() -> return text.parseList()
                 text.isObject() -> return text.parseObject()
-                else -> return text.unescape()
+                else -> return text
             }
         }
     }
@@ -34,6 +36,8 @@ class JsonParser {
 
     private fun String.isDouble() = this.toDoubleOrNull() != null
 
+    private fun String.isBigDecimal() = this.toBigDecimalOrNull() != null
+
     private fun String.isBoolean() = this == "false" || this == "true"
 
     private fun String.isList() = this.startsWith("[") && this.endsWith("]")
@@ -41,7 +45,7 @@ class JsonParser {
     private fun String.parseList(): List<Any?> {
         val listContent = this.replace("[", "").replace("]", "")
         if (listContent.isEmpty()) return listOf()
-        return listContent.split(", ").map { parse(it) }
+        return listContent.split(",").map { parse(it) }
     }
 
     private fun String.isObject() = this.startsWith("{") && this.endsWith("}")
@@ -53,7 +57,7 @@ class JsonParser {
         return mapOf(parse(entries[0]) to parse(entries[1]))
     }
 
-    private fun String.unescape() = this
+    private fun String.unescape() = this.trim()
         .unescapeUnicode()
         .unescapeLineBreaks()
         .replace("\"", "")
