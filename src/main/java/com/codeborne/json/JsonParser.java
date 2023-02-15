@@ -126,7 +126,11 @@ public class JsonParser {
             } else if (string.equals("false")) {
                 return false;
             } else {
-                return Integer.valueOf(string);
+                if (string.contains(".")) {
+                    return Double.valueOf(string);
+                } else {
+                    return Integer.valueOf(string);
+                }
             }
         }
     }
