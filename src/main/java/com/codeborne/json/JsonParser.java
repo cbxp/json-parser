@@ -4,10 +4,10 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.math.BigDecimal;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -17,6 +17,9 @@ public class JsonParser {
         return parse(new StringReader(input));
     }
 
+    // switch to decide value type (and start reading)
+    // switch to end value reading based on type
+    // switch to convert read string to type
     public Object parse(Reader input) throws IOException {
         StringBuffer valueBuffer = new StringBuffer();
         boolean readingValue = false;
@@ -26,6 +29,9 @@ public class JsonParser {
             if (character == -1) { // end of string
                 break;
             }
+            // isStartingReadingValue
+            // isFinishReadingValue
+            // convertValueToObject
             if (isWhiteSpace(character)) {
                 if (readingValue) {
                     if (valueType.equals("string")) {
@@ -66,19 +72,38 @@ public class JsonParser {
     }
 
     @Nullable
-    private static Object convertValueToObject(StringBuffer valueBuffer, String valueType) {
+    private Object convertValueToObject(StringBuffer valueBuffer, String valueType) {
         switch (valueType) {
             case "null":
                 return null;
             case "boolean":
                 return Boolean.parseBoolean(valueBuffer.toString());
             case "number":
-                return Integer.parseInt(valueBuffer.toString());
+                return numberValue(valueBuffer.toString());
             case "string":
                 return valueBuffer.toString().substring(1, valueBuffer.length() - 2);
             default:
                 throw new RuntimeException("not yet implemented");
         }
+    }
+
+    private Object numberValue(String numberString) {
+        BigDecimal bigDecimal = new BigDecimal(numberString);
+        if (isWholeNumber(bigDecimal)) {
+            if (bigDecimal.compareTo(new BigDecimal(Long.MAX_VALUE)) >= 0) {
+                return bigDecimal;
+            } else if (bigDecimal.compareTo(new BigDecimal(Integer.MAX_VALUE)) < 0) {
+                return bigDecimal.intValue();
+            } else {
+                return bigDecimal.longValue();
+            }
+        } else {
+            return bigDecimal.doubleValue();
+        }
+    }
+
+    public boolean isWholeNumber(BigDecimal number) {
+        return number.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) == 0;
     }
 
     private boolean isStartOfString(int character) {
