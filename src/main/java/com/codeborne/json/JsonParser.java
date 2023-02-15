@@ -152,8 +152,14 @@ public class JsonParser {
 
         ch = peek(input);
 
-        while (ch != null && !untilChars.contains(ch)) {
-            stringBuilder.append(read(input));
+        boolean escaping = false;
+
+        while (ch != null && !(untilChars.contains(ch) && !escaping)) {
+            escaping = ch == '\\';
+            Character character = read(input);
+
+            if (!escaping) stringBuilder.append(character);
+
             ch = peek(input);
         }
 

@@ -81,4 +81,10 @@ class JsonParserTest {
         assertThat(parser.parse("[{\"a\":  1}, {\"b\":  \"2\"}]"))
                 .isEqualTo(List.of(Map.of("a", 1), Map.of("b", "2")));
     }
+
+    @Test
+    void basicMapWithStringValueWithEscapedDoubleQuote() throws Exception {
+        assertThat(parser.parse("{\"a\": \"value \\\"quote\\\"\"}"))
+                .isEqualTo(Map.of("a", "value \"quote\""));
+    }
 }
