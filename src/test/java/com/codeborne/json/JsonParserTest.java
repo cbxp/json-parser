@@ -31,4 +31,17 @@ class JsonParserTest {
 
     assertThat(parser.parse(json)).isEqualTo(Map.of("key", "value"));
   }
+
+  @Test
+  void simpleSubObject() throws IOException, JsonParseException {
+    @Language("JSON") String json = """
+        {
+          "key": {
+            "key2": "value2"
+          }
+        }
+        """;
+
+    assertThat(parser.parse(json)).isEqualTo(Map.of("key", Map.of("key2", "value2")));
+  }
 }
