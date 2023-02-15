@@ -23,4 +23,9 @@ class JsonParserTest {
   void plainString() throws IOException, JsonParseException {
     assertThat(parser.parse("\"abc\"")).isEqualTo("abc");
   }
+
+  @Test
+  void emptyArray() throws IOException, JsonParseException {
+    assertThat(parser.parse("[   ]")).isEqualTo(new Object[]{});
+  }
 }
