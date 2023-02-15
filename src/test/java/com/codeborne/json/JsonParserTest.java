@@ -23,4 +23,9 @@ class JsonParserTest {
   void ignoreWhitespace_linefeed() throws Exception {
     assertThat(parser.parse("\nnull\n")).isNull();
   }
+
+  @Test
+  void ignoreWhitespace_carriageReturn() throws Exception {
+    assertThat(parser.parse("\rnull\r")).isNull();
+  }
 }
