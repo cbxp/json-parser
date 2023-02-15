@@ -21,14 +21,16 @@ public class JsonTokenizer {
 
       if (symbol == '{') return new JsonToken(TokenType.OBJ_START);
       if (symbol == '}') return new JsonToken(TokenType.OBJ_CLOSING);
+      if (symbol == ':') return new JsonToken(TokenType.COLON);
 
-    return null;
+
+      return null;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
-  enum TokenType {OBJ_START, OBJ_CLOSING, SEMI_COLON, VALUE}
+  enum TokenType {OBJ_START, OBJ_CLOSING, COLON, VALUE}
 
   protected static class JsonToken {
 

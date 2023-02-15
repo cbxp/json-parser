@@ -35,4 +35,12 @@ class JsonTokenizerTest {
     assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(OBJ_CLOSING));
     assertThat(tokenizer.nextToken()).isNull();
   }
+
+  @Test
+  void colon() {
+    JsonTokenizer tokenizer = new JsonTokenizer(new StringReader(":"));
+    assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(COLON));
+    assertThat(tokenizer.nextToken()).isNull();
+  }
+
 }
