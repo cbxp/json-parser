@@ -16,21 +16,22 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    int value = -1;
+    int value;
     String buffer = "";
-    Boolean isDouble = false;
-    Boolean isString = false;
+    boolean isDouble = false;
+    boolean isString = false;
     while ((value = input.read()) != -1) {
-      switch (value) {
-        case 34:
+      String stringValue = String.valueOf(Character.toChars(value));
+      switch (stringValue) {
+        case "\"":
           isString = true;
           break;
-        case 32:
+        case " ":
           if (!isString) break;
-        case 46:
+        case  ".":
           isDouble = true;
         default:
-          buffer = buffer + (char) value;
+          buffer = buffer + stringValue;
       }
       System.out.println("read = " + value);
     }
