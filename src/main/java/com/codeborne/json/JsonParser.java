@@ -27,10 +27,14 @@ public class JsonParser {
           .collect(Collectors.joining());
       if ("null".equals(line)) return null;
       if (line.startsWith("\"") && line.endsWith("\"")) {
-        return line.substring(1, line.length()-1);
+        return unescape(line.substring(1, line.length()-1));
       }
       return "true".equals(line);
     }
+  }
+
+  private String unescape(String value) {
+    return value.replaceAll("\\\\\"", "\"");
   }
 }
 

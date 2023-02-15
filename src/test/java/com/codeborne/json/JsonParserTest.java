@@ -30,6 +30,11 @@ class JsonParserTest {
   }
 
   @Test
+  void plainString_quotationMark() throws IOException, JsonParseException {
+    assertThat(parser.parse("\"\\\"\"")).isEqualTo("\"");
+  }
+  
+  @Test
   void ignoreWhitespace_space() throws Exception {
     assertThat(parser.parse(" null ")).isNull();
   }
