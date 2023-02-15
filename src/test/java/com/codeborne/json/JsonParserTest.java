@@ -20,25 +20,17 @@ class JsonParserTest {
     }
 
     @Test
-    void objectOfString() {
-        // language=JSON
-        String test = """
-        {"key": "value"}
-        """;
-        assertThat(test).isEqualTo(Map.of("key", "value"));
-    }
-
-    @Test
-    void objectOfInteger() {
-        // language=JSON
-        String test = """
-        {"key": 123}
-        """;
-        assertThat(test).isEqualTo(Map.of("key", 123));
-    }
-
-    @Test
     void basicStringNumber() throws Exception {
         assertThat(parser.parse("2")).isEqualTo(2);
+    }
+
+    @Test
+    void basicMapWithField() throws Exception {
+        assertThat(parser.parse("{\"field\": \"value\"}")).isEqualTo(Map.of("field", "value"));
+    }
+
+    @Test
+    void basicMapWithNumberField() throws Exception {
+        assertThat(parser.parse("{\"field\": 123}")).isEqualTo(Map.of("field", 123));
     }
 }

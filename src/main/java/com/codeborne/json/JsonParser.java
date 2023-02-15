@@ -5,6 +5,11 @@ import org.intellij.lang.annotations.Language;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.lang.Character.isWhitespace;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -19,7 +24,10 @@ public class JsonParser {
         Character ch = peek(input);
 
         if (ch != null) {
-            if (ch == '{' || ch == '[') {
+            if (ch == '{') {
+                result = readMap(input);
+                // TODO
+            } else if (ch == '[') {
                 // TODO
             } else {
                 result = readValue(input);
@@ -29,14 +37,31 @@ public class JsonParser {
         return result;
     }
 
+    private Map readMap(Reader input) throws IOException {
+        HashMap<String, Object> result = new HashMap();
+        input.read(); // curly bracket
+
+        String key = readString(input);
+
+        readWhitespaces(input);
+        input.read(); // colon
+        readWhitespaces(input);
+
+        Object value = readValue(input);
+
+        result.put(key, value);
+        return result;
+    }
+
     public Object readValue(Reader input) throws IOException {
         Character ch = peek(input);
 
         if (ch == '"') {
-            input.read();
-            return readString(input, '"');
+            return readString(input);
         } else {
-            String string = readString(input, null);
+            List<Character> untilChars = List.of('}', ',', '\n', '\r');
+
+            String string = readTokenUntilChar(input, untilChars);
             if (string.equals("null")) {
                 return null;
             } else if (string.equals("true")) {
@@ -49,13 +74,18 @@ public class JsonParser {
         }
     }
 
-    public String readString(Reader input, Character untilChar) throws IOException {
+    public String readString(Reader input) throws IOException {
+        input.read(); // double quote
+        return readTokenUntilChar(input, List.of('"'));
+    }
+
+    private String readTokenUntilChar(Reader input, List<Character> untilChars) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         Character ch;
 
         ch = read(input);
 
-        while (ch != null && (untilChar == null || ch != untilChar)) {
+        while (ch != null && !untilChars.contains(ch)) {
             stringBuilder.append(ch);
             ch = read(input);
         }
@@ -63,12 +93,21 @@ public class JsonParser {
         return stringBuilder.toString();
     }
 
-    public Character read(Reader input) throws IOException {
+    private void readWhitespaces(Reader input) throws IOException {
+        Character character = peek(input);
+
+        while (isWhitespace(character)) {
+            input.read();
+            character = peek(input);
+        }
+    }
+
+    private Character read(Reader input) throws IOException {
         int read = input.read();
         return read == -1 ? null : (char) read;
     }
 
-    public Character peek(Reader input) throws IOException {
+    private Character peek(Reader input) throws IOException {
         input.mark(1);
         Character ch = read(input);
         input.reset();
