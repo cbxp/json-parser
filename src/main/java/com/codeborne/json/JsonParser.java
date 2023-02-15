@@ -24,6 +24,8 @@ public class JsonParser {
                         return true;
                     case "false":
                         return false;
+                    case "null" :
+                        return null;
                     default:
                         throw new JsonParseException("Invalid JSON format", 0);
                 }
