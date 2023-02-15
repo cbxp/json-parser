@@ -18,4 +18,9 @@ class JsonParserTest {
   void plainNumber() throws IOException, JsonParseException {
     assertThat(parser.parse("123")).isEqualTo(123);
   }
+
+  @Test
+  void plainString() throws IOException, JsonParseException {
+    assertThat(parser.parse("\"abc\"")).isEqualTo("abc");
+  }
 }

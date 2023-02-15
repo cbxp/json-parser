@@ -32,6 +32,11 @@ public class JsonParser {
       return null;
     }
 
+
+    if (token.startsWith("\"") && token.endsWith("\"")) {
+      return token.substring(1, token.length() - 1);
+    }
+
     return Integer.parseInt(buf.toString());
   }
 }
