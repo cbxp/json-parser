@@ -65,11 +65,29 @@ public class JsonParser {
         input.read(); //square bracket
         ArrayList<Object> result = new ArrayList<>();
 
-        Character character = peek(input);
-        if (character == ']') {
+        Character ch = peek(input);
+        if (ch == ']') {
             input.read();
             return result;
         }
+
+        boolean isComma;
+
+        do {
+            readWhitespaces(input);
+            Object value = readValue(input);
+            result.add(value);
+            readWhitespaces(input);
+
+            ch = peek(input);
+
+            if (Objects.equals(ch, ',')) {
+                isComma = true;
+                input.read();
+            } else {
+                isComma = false;
+            }
+        } while (isComma);
 
         return result;
     }
@@ -96,7 +114,7 @@ public class JsonParser {
         } else if (ch == '[') {
             return readArray(input);
         } else {
-            List<Character> untilChars = List.of('}', ',', '\n', '\r');
+            List<Character> untilChars = List.of('}', ',', ']', '\n', '\r');
 
             String string = readTokenUntilChar(input, untilChars);
             if (string.equals("null")) {

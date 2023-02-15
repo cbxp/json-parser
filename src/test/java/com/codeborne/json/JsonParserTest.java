@@ -63,4 +63,10 @@ class JsonParserTest {
         assertThat(parser.parse("[]"))
                 .isEqualTo(List.of());
     }
+
+    @Test
+    void basicNumberArray() throws Exception {
+        assertThat(parser.parse("[1, 2, 3]"))
+                .isEqualTo(List.of(1, 2, 3));
+    }
 }
