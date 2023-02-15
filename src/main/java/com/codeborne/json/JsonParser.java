@@ -109,6 +109,8 @@ public class JsonParser {
     public Object readValue(Reader input) throws IOException {
         Character ch = peek(input);
 
+        readWhitespaces(input);
+
         if (ch == '"') {
             return readString(input);
         } else if (ch == '{') {
@@ -118,7 +120,7 @@ public class JsonParser {
         } else {
             List<Character> untilChars = List.of('}', ',', ']', '\n', '\r');
 
-            String string = readTokenUntilChar(input, untilChars);
+            String string = readTokenUntilChar(input, untilChars, true);
             if (string.equals("null")) {
                 return null;
             } else if (string.equals("true")) {
@@ -141,14 +143,18 @@ public class JsonParser {
 
     public String readString(Reader input) throws IOException {
         input.read(); // double quote
-        String token = readTokenUntilChar(input, List.of('"'));
+        String token = readTokenUntilChar(input, List.of('"'), false);
         input.read();
         return token;
     }
 
-    private String readTokenUntilChar(Reader input, List<Character> untilChars) throws IOException {
+    private String readTokenUntilChar(Reader input, List<Character> untilChars, boolean skipWhiteSpaces) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         Character ch;
+
+        if (skipWhiteSpaces) {
+            readWhitespaces(input);
+        }
 
         ch = peek(input);
 
@@ -159,6 +165,10 @@ public class JsonParser {
             Character character = read(input);
 
             if (!escaping) stringBuilder.append(character);
+
+            if (skipWhiteSpaces) {
+                readWhitespaces(input);
+            }
 
             ch = peek(input);
         }
