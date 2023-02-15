@@ -7,10 +7,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Collections.emptyList;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -30,12 +29,12 @@ public class JsonParser {
     }
   }
 
-  private List<Object> parseList(JsonScanner scanner) throws IOException {
+  private Object parseList(JsonScanner scanner) throws IOException {
     List<Object> result = new ArrayList<>();
     while (scanner.hasNext()) {
       var token = scanner.scan();
       if ("]".equals(token)) {
-        return result;
+        return result.isEmpty() ? emptyList() : result;
       }
       if (",".equals(token)) {
         continue;

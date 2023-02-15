@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static com.codeborne.json.assertions.JsonAssertions.assertThat;
+import static java.util.Collections.emptyList;
 
 class JsonParserTest {
   private final JsonParser parser = new JsonParser();
@@ -26,6 +27,6 @@ class JsonParserTest {
 
   @Test
   void emptyArray() throws IOException, JsonParseException {
-    assertThat(parser.parse("[   ]")).isEqualTo(new Object[]{});
+    assertThat(parser.parse("[   ]")).isEqualTo(emptyList());
   }
 }

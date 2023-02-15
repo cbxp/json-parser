@@ -41,7 +41,7 @@ class JsonParserComplianceTest {
   }
 
   @Test fun `empty list`() {
-    assertThat(parser.parse("[]")).isEqualTo(emptyList<Any>())
+    assertThat(parser.parse("[]")).isEqualTo(kotlin.collections.emptyList<kotlin.Any>())
   }
 
   @Test fun `simple list`() {
