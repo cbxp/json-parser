@@ -75,7 +75,7 @@ public class JsonParser {
       String stringValue = String.valueOf(Character.toChars(value));
       switch (stringValue) {
         case "\\":
-          buffer.append(String.valueOf(Character.toChars(input.read())));
+          buffer.append(readEscaped(input));
           break;
         case "\"":
           return buffer.toString();
@@ -84,6 +84,18 @@ public class JsonParser {
       }
     }
     return buffer.toString();
+  }
+
+  private static String readEscaped(Reader input) throws IOException {
+    String value = String.valueOf(Character.toChars(input.read()));
+    switch (value) {
+      case "n": return "\n";
+      case "t": return "\t";
+      case "b": return "\b";
+      case "r": return "\r";
+      case "f": return "\f";
+      default: return value;
+    }
   }
 
   private static Map<String, Object> readObject(Reader input) throws IOException {
