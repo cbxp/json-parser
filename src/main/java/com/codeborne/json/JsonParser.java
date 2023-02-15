@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,13 +18,24 @@ public class JsonParser {
     return parse(new StringReader(input));
   }
 
+  private List<Object> parseList(JsonScanner scanner) throws IOException {
+    List result = new ArrayList();
+    while (scanner.hasNext()) {
+      var token = scanner.scan();
+      if ("]".equals(token)) {
+        return result;
+      }
+    }
+    throw new RuntimeException("Unexpected end of JSON");
+  }
+
   private Object parse(JsonScanner scanner) throws IOException {
     String token = null;
     Object result = null;
     while (scanner.hasNext()) {
       token = scanner.scan();
-      if (List.of("[", "]", "{", "}", ":", ",").contains(token)) {
-        throw new RuntimeException("Not implemented: " + token);
+      if ("[".equals(token)) {
+        return parseList(scanner);
       }
       if ("null".equals(token)) {
         return null;
