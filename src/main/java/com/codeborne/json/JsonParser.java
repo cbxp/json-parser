@@ -16,11 +16,10 @@ import java.util.Map;
  */
 public class JsonParser {
   @Nullable
-  private static Object readValue(Reader input) throws IOException {
+  private static Object readValue(Reader input, Boolean isString) throws IOException {
     int value;
     String buffer = "";
     boolean isDouble = false;
-    boolean isString = false;
     boolean exit = false;
     while ((value = input.read()) != -1) {
       String stringValue = String.valueOf(Character.toChars(value));
@@ -42,9 +41,8 @@ public class JsonParser {
           buffer = buffer + String.valueOf(Character.toChars(input.read()));
           break;
         case "\"":
-          if (isString) exit = true;
-          isString = true;
-          break;
+          if (isString) return buffer;
+          else return readValue(input, true);
         case " ":
           if (!isString) break;
         case ".":
@@ -91,9 +89,9 @@ public class JsonParser {
   }
 
   private static Map<String, Object> readKeyValue(Reader input) throws IOException {
-    var key = (String)readValue(input);
-    readValue(input);
-    var value = readValue(input);
+    var key = (String)readValue(input, false);
+    readValue(input, false);
+    var value = readValue(input, false);
     if (key == null) return null;
     return Map.of(key, value);
   }
@@ -101,7 +99,7 @@ public class JsonParser {
   private static List<Object> readArray(Reader input) throws IOException {
     List<Object> objects = new ArrayList<>();
     Object v = null;
-    while ((v = readValue(input)) != null) {
+    while ((v = readValue(input, false)) != null) {
       objects.add(v);
     }
     return objects;
@@ -112,7 +110,7 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    return readValue(input);
+    return readValue(input, false);
   }
 }
 
