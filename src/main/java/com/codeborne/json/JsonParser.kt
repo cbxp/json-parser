@@ -22,7 +22,7 @@ class JsonParser {
                 text.isDouble() -> return text.toDouble()
                 text.isBoolean() -> return text.toBoolean()
                 text == "{}" -> return mapOf<String, String>()
-                text == "[]" -> return listOf<String>()
+                text.isList() -> return text.parseList()
                 else -> return text.replace("\"", "")
             }
         }
@@ -35,4 +35,12 @@ class JsonParser {
     private fun String.isDouble() = this.toDoubleOrNull() != null
 
     private fun String.isBoolean() = this == "false" || this == "true"
+
+    private fun String.isList() = this.startsWith("[") && this.endsWith("]")
+
+    private fun String.parseList(): List<Any?> {
+        val listContent = this.replace("[", "").replace("]", "")
+        if (listContent.isEmpty()) return listOf()
+        return listContent.split(", ").map { parse(it) }
+    }
 }
