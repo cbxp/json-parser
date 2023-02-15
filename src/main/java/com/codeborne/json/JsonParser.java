@@ -49,7 +49,6 @@ public class JsonParser {
     Map<String, Object> result = new HashMap<>();
     while (scanner.hasNext()) {
       var token = scanner.scan();
-      System.out.println("Token: " + token);
 
       if ("}".equals(token)) {
         return result;
