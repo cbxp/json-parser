@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static com.codeborne.json.JsonAssertions.file;
+import static com.codeborne.json.assertions.JsonAssertions.file;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -15,7 +15,7 @@ public class BigRecursiveObjectTest {
 
   @Test
   @SuppressWarnings("unchecked")
-  void hugeJson() throws IOException {
+  void hugeJson() throws IOException, JsonParseException {
     Object json = parser.parse(file("big-recursive-object.json"));
     for (int i = 0; i < 4932; i++) {
       assertThat(json).isInstanceOf(Map.class);

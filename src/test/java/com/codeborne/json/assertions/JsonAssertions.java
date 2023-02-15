@@ -1,4 +1,4 @@
-package com.codeborne.json;
+package com.codeborne.json.assertions;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -10,8 +10,7 @@ public class JsonAssertions {
     return new JsonAssert(parsedJson);
   }
 
-  static Reader file(String fileName) {
+  public static Reader file(String fileName) {
     return new InputStreamReader(JsonAssertions.class.getResourceAsStream('/' + fileName), UTF_8);
   }
-
 }
