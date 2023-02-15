@@ -18,10 +18,14 @@ public class JsonParser {
     int value = -1;
     String buffer = "";
     Boolean isDouble = false;
+    Boolean isString = false;
     while ((value = input.read()) != -1) {
       switch (value) {
-        case 32:
+        case 34:
+          isString = true;
           break;
+        case 32:
+          if (!isString) break;
         case 46:
           isDouble = true;
         default:
@@ -39,6 +43,7 @@ public class JsonParser {
       case "false":
         return false;
       default:
+        if (isString) return buffer;
         if (isDouble) {
           return Double.valueOf(buffer);
         } else {

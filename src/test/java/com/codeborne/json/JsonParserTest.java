@@ -33,4 +33,9 @@ class JsonParserTest {
   void valueNumericDouble() throws IOException, JsonParseException {
     assertThat(parser.parse("1.22")).isEqualTo(1.22);
   }
+
+  @Test
+  void valueSimpleString() throws IOException, JsonParseException {
+    assertThat(parser.parse("\"string\"")).isEqualTo("string");
+  }
 }
