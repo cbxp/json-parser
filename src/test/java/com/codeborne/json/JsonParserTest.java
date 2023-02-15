@@ -25,6 +25,11 @@ class JsonParserTest {
   }
 
   @Test
+  void plainString() throws Exception{
+    assertThat(parser.parse("\"foo bar\"")).isEqualTo("foo bar");
+  }
+
+  @Test
   void ignoreWhitespace_space() throws Exception {
     assertThat(parser.parse(" null ")).isNull();
   }
