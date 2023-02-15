@@ -2,6 +2,7 @@ package com.codeborne.json;
 
 import org.intellij.lang.annotations.Language;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
