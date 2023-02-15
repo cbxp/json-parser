@@ -17,7 +17,7 @@ public class JsonParser {
 
   public Object parse(Reader input) throws IOException, JsonParseException {
     try (BufferedReader reader = new BufferedReader(input)) {
-      String line = reader.readLine();
+      String line = reader.readLine().trim();
       if ("null".equals(line)) return null;
       return "true".equals(line);
     }
