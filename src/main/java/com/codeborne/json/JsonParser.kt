@@ -12,17 +12,16 @@ class JsonParser {
         return parse(StringReader(input))
     }
 
-    @Throws(IOException::class, JsonParseException::class)
-    fun parse(@Language("JSON") input: Int?): Any? {
-        return input
-    }
-
-    @Throws(IOException::class, JsonParseException::class)
     fun parse(input: Reader?): Any? {
         return input?.let {
             val text = it.readText()
             if (text == "null") return null
+            if (text.isNumeric()) return text.toInt()
             text.toBoolean()
         }
+    }
+
+    private fun String.isNumeric() = this.all {
+        it.isDigit()
     }
 }
