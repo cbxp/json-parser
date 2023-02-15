@@ -11,4 +11,9 @@ class JsonParserTest {
   void plainNull() throws Exception {
     assertThat(parser.parse("null")).isNull();
   }
+
+  @Test
+  void plainString() throws Exception {
+    assertThat(parser.parse("\"tere\"")).isEqualTo("tere");
+  }
 }
