@@ -128,7 +128,7 @@ public class JsonParser {
             } else if (string.equals("false")) {
                 return false;
             } else {
-                if (string.contains(".")) {
+                if (string.contains(".") || string.contains("e")) {
                     return Double.valueOf(string);
                 } else {
                     try {
