@@ -16,4 +16,9 @@ class JsonParserTest {
     fun `plain number`() {
         JsonAssertions.assertThat(parser.parse("123")).isEqualTo(123)
     }
+
+    @Test
+    fun `plain string`() {
+        JsonAssertions.assertThat(parser.parse("\"something\"")).isEqualTo("something")
+    }
 }

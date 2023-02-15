@@ -17,11 +17,14 @@ class JsonParser {
             val text = it.readText()
             if (text == "null") return null
             if (text.isNumeric()) return text.toInt()
-            text.toBoolean()
+            if (text.isBoolean()) return text.toBoolean()
+            return text.replace("\"", "")
         }
     }
 
     private fun String.isNumeric() = this.all {
         it.isDigit()
     }
+
+    private fun String.isBoolean() = this == "false" || this == "true"
 }
