@@ -33,6 +33,19 @@ class JsonParserTest {
   }
 
   @Test
+  void multiPropertyObject() throws IOException, JsonParseException {
+    @Language("JSON") String json = """
+        {
+          "key":"value",
+          "key2":"value2",
+          "key3":"value3"
+        }
+        """;
+
+    assertThat(parser.parse(json)).isEqualTo(Map.of("key", "value", "key2", "value2", "key3", "value3"));
+  }
+
+  @Test
   void simpleSubObject() throws IOException, JsonParseException {
     @Language("JSON") String json = """
         {

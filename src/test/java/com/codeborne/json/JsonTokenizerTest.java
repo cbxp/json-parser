@@ -32,6 +32,12 @@ class JsonTokenizerTest {
   }
 
   @Test
+  void comma() {
+    JsonTokenizer tokenizer = new JsonTokenizer(new StringReader(","));
+    assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(COMMA));
+  }
+
+  @Test
   void emptyObject() {
     JsonTokenizer tokenizer = new JsonTokenizer(new StringReader("{}"));
     assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(OBJ_START));

@@ -21,30 +21,39 @@ public class JsonParser {
   }
 
   private Map parseObject(JsonTokenizer tokenizer, Map collected) throws JsonParseException {
+    JsonToken token;
 
-    JsonToken token = tokenizer.nextToken();
+    do {
+      token = tokenizer.nextToken();
+      if (token == null) throw new JsonParseException("Expected object closing token", 0);
 
-    if (token == null || token.type == COLON) throw new JsonParseException("Expected object closing token", 0);
+      if (token.type == COLON) throw new JsonParseException("Expected object closing token", 0);
 
-    if (token.type == OBJ_CLOSING) return collected;
+      if (token.type == OBJ_CLOSING) return collected;
 
-    expectToken(VALUE, "Expected property value token", token);
-    expectToken(COLON, "Expected colon token", tokenizer.nextToken());
+      expectToken(VALUE, "Expected property value token", token);
+      expectToken(COLON, "Expected colon token", tokenizer.nextToken());
 
-    JsonToken token2 = tokenizer.nextToken();
+      JsonToken token2 = tokenizer.nextToken();
 
-    if (token2 == null) throw new JsonParseException("Expected object start of value token", 0);
+      if (token2 == null) throw new JsonParseException("Expected object start of value token", 0);
 
-    if (token2.type == VALUE) {
-      collected.put(token.value, token2.value);
-    }
+      if (token2.type == VALUE) {
+        collected.put(token.value, token2.value);
+      }
 
-    if (token2.type == OBJ_START) {
-      Map<String, String> subObject = new HashMap();
-      collected.put(token.value, subObject);
-      parseObject(tokenizer, subObject);
-    }
-    return collected;
+      if (token2.type == OBJ_START) {
+        Map<String, String> subObject = new HashMap();
+        collected.put(token.value, subObject);
+        parseObject(tokenizer, subObject);
+      }
+
+      token = tokenizer.nextToken();
+
+      if (token == null || token.type == OBJ_CLOSING) return collected;
+      expectToken(COMMA, "Expected comma token", token);
+
+    } while (true);
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {

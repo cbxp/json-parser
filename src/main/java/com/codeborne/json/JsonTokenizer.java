@@ -35,6 +35,7 @@ public class JsonTokenizer {
       if (symbol == '{') return new JsonToken(TokenType.OBJ_START);
       if (symbol == '}') return new JsonToken(TokenType.OBJ_CLOSING);
       if (symbol == ':') return new JsonToken(TokenType.COLON);
+      if (symbol == ',') return new JsonToken(TokenType.COMMA);
 
       if (symbol == '"') {
         StringBuffer buffer = new StringBuffer();
@@ -53,7 +54,7 @@ public class JsonTokenizer {
     }
   }
 
-  enum TokenType {OBJ_START, OBJ_CLOSING, COLON, VALUE}
+  enum TokenType {OBJ_START, OBJ_CLOSING, COLON, COMMA, VALUE}
 
   protected static class JsonToken {
 
