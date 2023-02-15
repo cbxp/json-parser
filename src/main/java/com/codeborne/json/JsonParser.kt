@@ -21,6 +21,8 @@ class JsonParser {
                 text.isLong() -> return text.toLong()
                 text.isDouble() -> return text.toDouble()
                 text.isBoolean() -> return text.toBoolean()
+                text == "{}" -> return mapOf<String, String>()
+                text == "[]" -> return listOf<String>()
                 else -> return text.replace("\"", "")
             }
         }
