@@ -43,6 +43,7 @@ public class JsonParser {
         case "\f":
           break;
         case ".":
+        case "e":
           isDouble = true;
         default:
           buffer = buffer + stringValue;
