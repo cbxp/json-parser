@@ -5,6 +5,8 @@ import org.intellij.lang.annotations.Language;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -15,8 +17,22 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    // TODO implement me
-    return null;
+    var buf = new StringBuilder();
+    while (true){
+      var nextChars = input.read();
+      if (nextChars == -1) {
+        break;
+      }
+      buf.append(Character.toChars(nextChars));
+    }
+
+    var token = buf.toString();
+
+    if (token.equals("null")) {
+      return null;
+    }
+
+    return Integer.parseInt(buf.toString());
   }
 }
 
