@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.lang.Character.isWhitespace;
 
@@ -44,9 +45,33 @@ public class JsonParser {
 
         Character ch = peek(input);
         if (ch == '}') {
+            input.read();
+            readWhitespaces(input);
             return result;
         }
 
+        boolean isComma;
+
+        do {
+            readWhitespaces(input);
+            Pair pair = readKeyAndValue(input);
+            result.put(pair.key, pair.value);
+            readWhitespaces(input);
+
+            ch = peek(input);
+
+            if (Objects.equals(ch, ',')) {
+                isComma = true;
+                input.read();
+            } else {
+                isComma = false;
+            }
+        } while (isComma);
+
+        return result;
+    }
+
+    private Pair readKeyAndValue(Reader input) throws IOException {
         String key = readString(input);
 
         readWhitespaces(input);
@@ -55,8 +80,7 @@ public class JsonParser {
 
         Object value = readValue(input);
 
-        result.put(key, value);
-        return result;
+        return new Pair(key, value);
     }
 
     public Object readValue(Reader input) throws IOException {
@@ -82,18 +106,20 @@ public class JsonParser {
 
     public String readString(Reader input) throws IOException {
         input.read(); // double quote
-        return readTokenUntilChar(input, List.of('"'));
+        String token = readTokenUntilChar(input, List.of('"'));
+        input.read();
+        return token;
     }
 
     private String readTokenUntilChar(Reader input, List<Character> untilChars) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         Character ch;
 
-        ch = read(input);
+        ch = peek(input);
 
         while (ch != null && !untilChars.contains(ch)) {
-            stringBuilder.append(ch);
-            ch = read(input);
+            stringBuilder.append(read(input));
+            ch = peek(input);
         }
 
         return stringBuilder.toString();
@@ -102,7 +128,7 @@ public class JsonParser {
     private void readWhitespaces(Reader input) throws IOException {
         Character character = peek(input);
 
-        while (isWhitespace(character)) {
+        while (character != null && (isWhitespace(character) || character == ' ')) {
             input.read();
             character = peek(input);
         }
@@ -118,5 +144,15 @@ public class JsonParser {
         Character ch = read(input);
         input.reset();
         return ch;
+    }
+
+    static class Pair {
+        String key;
+        Object value;
+
+        public Pair(String key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }

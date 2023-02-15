@@ -44,4 +44,10 @@ class JsonParserTest {
         assertThat(parser.parse("{}"))
                 .isEqualTo(Map.of());
     }
+
+    @Test
+    void basicMapWithMultipleKeys() throws Exception {
+        assertThat(parser.parse("{\"foo\": 123, \"bar\": \"value\"}"))
+                .isEqualTo(Map.of("foo", 123, "bar", "value"));
+    }
 }
