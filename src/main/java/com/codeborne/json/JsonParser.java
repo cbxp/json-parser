@@ -17,22 +17,33 @@ public class JsonParser {
   public Object parse(Reader input) throws IOException, JsonParseException {
     int value = -1;
     String buffer = "";
+    Boolean isDouble = false;
     while ((value = input.read()) != -1) {
       switch (value) {
         case 32:
           break;
+        case 46:
+          isDouble = true;
         default:
           buffer = buffer + (char) value;
       }
       System.out.println("read = " + value);
     }
     switch (buffer) {
-      case "": return null;
-      case "null": return null;
-      case "true": return true;
-      case "false": return false;
+      case "":
+        return null;
+      case "null":
+        return null;
+      case "true":
+        return true;
+      case "false":
+        return false;
       default:
+        if (isDouble) {
+          return Double.valueOf(buffer);
+        } else {
           return Integer.valueOf(buffer);
+        }
     }
   }
 }

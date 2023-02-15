@@ -28,4 +28,9 @@ class JsonParserTest {
     assertThat(parser.parse(" false")).isEqualTo(false);
     assertThat(parser.parse(" true ")).isEqualTo(true);
   }
+
+  @Test
+  void valueNumericDouble() throws IOException, JsonParseException {
+    assertThat(parser.parse("1.22")).isEqualTo(1.22);
+  }
 }
