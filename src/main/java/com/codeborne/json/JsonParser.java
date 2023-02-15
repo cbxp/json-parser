@@ -8,7 +8,9 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -19,10 +21,21 @@ public class JsonParser {
   }
 
   private List<Object> parseList(JsonScanner scanner) throws IOException {
-    List result = new ArrayList();
+    List<Object> result = new ArrayList<>();
     while (scanner.hasNext()) {
       var token = scanner.scan();
       if ("]".equals(token)) {
+        return result;
+      }
+    }
+    throw new RuntimeException("Unexpected end of JSON");
+  }
+
+  private Map<String, Object> parseObject(JsonScanner scanner) throws IOException {
+    Map<String, Object> result = new HashMap<>();
+    while (scanner.hasNext()) {
+      var token = scanner.scan();
+      if ("}".equals(token)) {
         return result;
       }
     }
@@ -36,6 +49,9 @@ public class JsonParser {
       token = scanner.scan();
       if ("[".equals(token)) {
         return parseList(scanner);
+      }
+      if ("{".equals(token)) {
+        return parseObject(scanner);
       }
       if ("null".equals(token)) {
         return null;
