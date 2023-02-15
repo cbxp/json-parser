@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.stream.Collectors;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -16,21 +17,54 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    BufferedReader bufferedReader = new BufferedReader(input);
-    String line;
-    StringBuilder result = new StringBuilder();
-    while ((line = bufferedReader.readLine()) != null) {
-      result.append(line);
-    }
-    String string = result.toString();
-    System.out.println(string);
+    try (BufferedReader bufferedReader = new BufferedReader(input)) {
+      bufferedReader.mark(1000);
+      int character = bufferedReader.read();
+      if (isEOF(character)) {
+        throw new JsonParseException("Empty string", 0);
+      }
 
-    switch (string) {
-      case "null":
-        return null;
-      default:
-        return Boolean.parseBoolean(string);
+      bufferedReader.reset();
+      if (couldBeNull(character)) {
+        return parseNull(bufferedReader);
+      } else if (couldBeBoolean(character)) {
+        return parseBoolean(bufferedReader);
+      }
+      throw new JsonParseException("Not yet implemented", -1);
     }
+  }
 
+  private boolean isEOF(int chr) {
+    return chr == -1;
+  }
+
+  private boolean isWhitespace(int chr) {
+    return Character.isWhitespace(chr);
+  }
+
+  private boolean couldBeNull(int character) {
+    return character == 'n';
+  }
+
+  private Object parseNull(BufferedReader reader) throws JsonParseException {
+    String value = reader.lines().collect(Collectors.joining());
+    if ("null".equals(value)) {
+      return null;
+    }
+    throw new JsonParseException("Unknown value %s".formatted(value), -1);
+  }
+
+  private boolean couldBeBoolean(int character) {
+    return character == 't' || character == 'f';
+  }
+
+  private Object parseBoolean(BufferedReader reader) throws JsonParseException {
+    String value = reader.lines().collect(Collectors.joining());
+    if ("true".equals(value)) {
+      return true;
+    } else if ("false".equals(value)) {
+      return false;
+    }
+    throw new JsonParseException("Unknown value %s".formatted(value), -1);
   }
 }
