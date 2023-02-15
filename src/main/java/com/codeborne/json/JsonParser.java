@@ -37,6 +37,10 @@ public class JsonParser {
         case "\"":
           return readString(input);
         case " ":
+        case "\n":
+        case "\r":
+        case "\t":
+        case "\f":
           break;
         case ".":
           isDouble = true;
