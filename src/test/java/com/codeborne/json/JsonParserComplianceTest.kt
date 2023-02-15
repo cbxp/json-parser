@@ -15,4 +15,44 @@ class JsonParserComplianceTest {
     assertThat(parser.parse("true")).isEqualTo(true)
     assertThat(parser.parse("false")).isEqualTo(false)
   }
+
+  @Test fun integer() {
+    assertThat(parser.parse("123")).isEqualTo(123)
+  }
+
+  @Test fun `empty string`() {
+    assertThat(parser.parse("\"\"")).isEqualTo("")
+  }
+
+  @Test fun strings() {
+    assertThat(parser.parse("\"Hello Мир\"")).isEqualTo("Hello Мир")
+  }
+
+  @Test fun `negative integer`() {
+    assertThat(parser.parse("-123")).isEqualTo(-123)
+  }
+
+  @Test fun long() {
+    assertThat(parser.parse((Int.MAX_VALUE.toLong() + 1).toString())).isEqualTo(Int.MAX_VALUE.toLong() + 1)
+  }
+
+  @Test fun double() {
+    assertThat(parser.parse("1.2")).isEqualTo(1.2)
+  }
+
+  @Test fun `empty list`() {
+    assertThat(parser.parse("[]")).isEqualTo(emptyList<Any>())
+  }
+
+  @Test fun `simple list`() {
+    assertThat(parser.parse("[1, 2, 3]")).isEqualTo(listOf(1, 2, 3))
+  }
+
+  @Test fun `empty object`() {
+    assertThat(parser.parse("{}")).isEqualTo(emptyMap<Any, Any>())
+  }
+
+  @Test fun `basic object`() {
+    assertThat(parser.parse("""{"Hello": "World"}""")).isEqualTo(mapOf("Hello" to "World"))
+  }
 }
