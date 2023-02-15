@@ -34,8 +34,6 @@ class JsonParser {
 
     private fun String.isLong() = this.toLongOrNull() != null
 
-    private fun String.isDouble() = this.toDoubleOrNull() != null
-
     private fun String.isBigDecimal() = this.toBigDecimalOrNull() != null
 
     private fun String.isBoolean() = this == "false" || this == "true"
