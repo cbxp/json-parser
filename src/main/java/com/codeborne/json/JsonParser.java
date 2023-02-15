@@ -16,13 +16,8 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    BufferedReader reader = new BufferedReader(input);
-
-    String line = reader.readLine();
-    if (line.equals("null")) return null;
-
-    return line.equals("true");
-  }
+    // TODO implement me
+    return null;  }
 }
 
 /*
