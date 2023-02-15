@@ -43,4 +43,9 @@ class JsonParserTest {
   void valueStringWithSpaces() throws IOException, JsonParseException {
     assertThat(parser.parse("\" string string \"")).isEqualTo(" string string ");
   }
+
+  @Test
+  void valueStringHasQuotationMark() throws IOException, JsonParseException {
+    assertThat(parser.parse("\"\\\"\"")).isEqualTo("\"");
+  }
 }

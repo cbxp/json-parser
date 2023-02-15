@@ -20,12 +20,20 @@ public class JsonParser {
     String buffer = "";
     boolean isDouble = false;
     boolean isString = false;
+    boolean isEscaped = false;
     while ((value = input.read()) != -1) {
       String stringValue = String.valueOf(Character.toChars(value));
       switch (stringValue) {
-        case "\"":
-          isString = true;
+        case "\\":
+          isEscaped = true;
           break;
+        case "\"":
+          if (!isEscaped) {
+            isString = true;
+            break;
+          } else {
+            isEscaped = false;
+          }
         case " ":
           if (!isString) break;
         case  ".":
@@ -33,6 +41,7 @@ public class JsonParser {
         default:
           buffer = buffer + stringValue;
       }
+
       System.out.println("read = " + value);
     }
     switch (buffer) {
