@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -29,9 +31,6 @@ public class JsonParser {
             if (character == -1) { // end of string
                 break;
             }
-            // isStartingReadingValue
-            // isFinishReadingValue
-            // convertValueToObject
             if (isWhiteSpace(character)) {
                 if (readingValue) {
                     if (valueType.equals("string")) {
@@ -65,10 +64,24 @@ public class JsonParser {
             valueType = "number";
         } else if (isStartOfString(character)) {
             valueType = "string";
+        } else if (isStartOfArray(character)) {
+            valueType = "array";
+        } else if (isStartOfObject(character)) {
+            valueType = "object";
         } else {
             throw new RuntimeException("unknown value start");
         }
         return valueType;
+    }
+
+    private boolean isStartOfObject(int character) {
+        String s = String.valueOf((char) character);
+        return s.equalsIgnoreCase("{");
+    }
+
+    private boolean isStartOfArray(int character) {
+        String s = String.valueOf((char) character);
+        return s.equalsIgnoreCase("[");
     }
 
     @Nullable
@@ -82,6 +95,10 @@ public class JsonParser {
                 return numberValue(valueBuffer.toString());
             case "string":
                 return valueBuffer.toString().substring(1, valueBuffer.length() - 2);
+            case "array":
+                return List.of();
+            case "object":
+                return Map.of();
             default:
                 throw new RuntimeException("not yet implemented");
         }
