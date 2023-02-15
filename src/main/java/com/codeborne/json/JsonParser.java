@@ -17,7 +17,8 @@ public class JsonParser {
 
   public Object parse(Reader input) throws IOException, JsonParseException {
     // TODO implement me
-    return null;  }
+    return null;
+  }
 }
 
 /*
