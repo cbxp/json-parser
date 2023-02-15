@@ -10,14 +10,25 @@ import java.io.StringReader;
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
  */
 public class JsonParser {
-  public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
-    return parse(new StringReader(input));
-  }
+    public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
+        return parse(new StringReader(input));
+    }
 
-  public Object parse(Reader input) throws IOException, JsonParseException {
-    // TODO implement me
-    return null;
-  }
+    public Object parse(Reader input) throws IOException, JsonParseException {
+        StringBuffer buffer = new StringBuffer();
+        while (true) {
+            int character = input.read();
+            if (character == -1) {
+                break;
+            }
+            buffer.append((char) character);
+        }
+        String s = buffer.toString();
+        if (s.equals("null")) {
+            return null;
+        }
+        return s;
+    }
 }
 
 /*
