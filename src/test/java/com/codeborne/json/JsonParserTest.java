@@ -36,4 +36,9 @@ class JsonParserTest {
         """;
         assertThat(test).isEqualTo(Map.of("key", 123));
     }
+
+    @Test
+    void basicStringNumber() throws Exception {
+        assertThat(parser.parse("2")).isEqualTo(2);
+    }
 }
