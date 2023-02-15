@@ -1,5 +1,6 @@
 package com.codeborne.json;
 
+import com.google.gson.Gson;
 import org.intellij.lang.annotations.Language;
 
 import java.io.IOException;
@@ -15,8 +16,7 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    // TODO implement me
-    return null;
+    return new Gson().fromJson(input, Object.class);
   }
 }
 
