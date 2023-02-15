@@ -162,7 +162,26 @@ public class JsonParser {
 
         while (ch != null && !(untilChars.contains(ch) && !escaping)) {
             escaping = ch == '\\';
+
+            if (escaping) {
+                input.read();
+            }
+
             Character character = read(input);
+
+            if (escaping && Objects.equals(character, 'u')) {
+                Character c1 = read(input);
+                Character c2 = read(input);
+                Character c3 = read(input);
+                Character c4 = read(input);
+
+                char[] arr = { c1, c2, c3, c4 };
+                String text = String.valueOf(arr);
+
+                int hex = Integer.parseInt(text, 16);
+
+                stringBuilder.append((char) hex);
+            }
 
             if (!escaping) stringBuilder.append(character);
 
