@@ -6,8 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -31,13 +29,19 @@ public class JsonParser {
                     case "\"\"" :
                         return "";
                 }
-                if (checkIfInteger(line)) return Integer.valueOf(line);
+                if (checkIfIntegerOrLong(line)) {
+                    long aLong = Long.parseLong(line);
+                    if (aLong > Integer.MAX_VALUE || aLong < Integer.MIN_VALUE) {
+                        return aLong;
+                    } return (int) aLong;
+                }
             }
+
         }
         return null;
     }
 
-    private boolean checkIfInteger(String line) {
+    private boolean checkIfIntegerOrLong(String line) {
         if (line.length() > 1) {
             if (!line.substring(0, 1).matches("[0-9, -]")) return false;
             return !line.substring(1).matches("[0-9]");
