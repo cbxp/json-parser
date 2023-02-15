@@ -15,8 +15,34 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    // TODO implement me
-    return null;
+    int c = input.read();
+    if (c == -1) {
+      throw new JsonParseException("Empty input", 0);
+    }
+    boolean isString = isString(c);
+    input.reset();
+    String result = readToString(input);
+    if (isString) {
+      return result.substring(1, result.length() - 1);
+    }
+    return switch (result) {
+      case "null" -> null;
+      case "true" -> true;
+      case "false" -> false;
+      default -> result;
+    };
+  }
+
+  private boolean isString(int c) {
+    return c == '"';
+  }
+
+  private String readToString(Reader input) throws IOException {
+    StringBuilder sb = new StringBuilder();
+    for (int c = input.read(); c != -1; c = input.read()) {
+      sb.append((char) c);
+    }
+    return sb.toString();
   }
 }
 
