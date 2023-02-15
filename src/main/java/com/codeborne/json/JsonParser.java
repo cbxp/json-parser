@@ -1,11 +1,15 @@
 package com.codeborne.json;
 
+import com.codeborne.json.JsonTokenizer.JsonToken;
+import com.codeborne.json.JsonTokenizer.TokenType;
 import org.intellij.lang.annotations.Language;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Map;
+
+import static com.codeborne.json.JsonTokenizer.TokenType.*;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -16,8 +20,28 @@ public class JsonParser {
   }
 
   public Object parse(Reader input) throws IOException, JsonParseException {
-    // TODO implement me
-    return null;
+    JsonTokenizer tokenizer = new JsonTokenizer(input);
+
+    JsonToken token = tokenizer.nextToken();
+    if (token == null) return null;
+
+    expectToken(OBJ_START, "Expected object start token", token);
+    JsonToken keyToke = tokenizer.nextToken();
+
+    if (keyToke != null && keyToke.type == OBJ_CLOSING) return Map.of();
+
+    expectToken(COLON, "Expected colon token", tokenizer.nextToken());
+
+    JsonToken value = tokenizer.nextToken();
+    expectToken(VALUE, "Expected property value token", value);
+
+    expectToken(OBJ_CLOSING, "Expected object closing token", tokenizer.nextToken());
+
+    return Map.of(keyToke.value, value.value);
+  }
+
+  private static void expectToken(TokenType expected, String messag, JsonToken token) throws JsonParseException {
+    if (token == null || token.type != expected) throw new JsonParseException(messag, 0);
   }
 }
 

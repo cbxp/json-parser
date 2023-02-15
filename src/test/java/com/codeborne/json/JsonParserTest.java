@@ -1,5 +1,6 @@
 package com.codeborne.json;
 
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,5 +19,16 @@ class JsonParserTest {
   @Test
   void emptyObject() throws IOException, JsonParseException {
     assertThat(parser.parse("{}")).isEqualTo(Map.of());
+  }
+
+  @Test
+  void simpleObject() throws IOException, JsonParseException {
+    @Language("JSON") String json = """
+        {
+          "key":"value"
+        }
+        """;
+
+    assertThat(parser.parse(json)).isEqualTo(Map.of("key", "value"));
   }
 }
