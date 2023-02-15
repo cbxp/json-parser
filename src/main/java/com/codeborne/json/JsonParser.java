@@ -19,13 +19,45 @@ public class JsonParser {
     return parse(new StringReader(input));
   }
 
-  private void parseColon(JsonScanner scanner) throws IOException {
-    if (!scanner.hasNext()) {
+  public Object parse(Reader input) throws IOException {
+    var scanner = new JsonScanner(input);
+    var token = scanner.scan();
+    return parseValue(token, scanner);
+  }
+
+  private Object parseValue(String token, JsonScanner scanner) throws IOException {
+    if (token == null) {
       throw new RuntimeException("Unexpected end of JSON");
     }
-    var token = scanner.scan();
-    if (!":".equals(token)) {
-      throw new RuntimeException("Colon expected: " + token);
+    if ("[".equals(token)) {
+      return parseList(scanner);
+    }
+    if ("{".equals(token)) {
+      return parseObject(scanner);
+    }
+    if ("null".equals(token)) {
+      return null;
+    }
+    if ("true".equals(token)) {
+      return true;
+    }
+    if ("false".equals(token)) {
+      return false;
+    }
+    if (token.startsWith("\"") && token.endsWith("\"")) {
+      return token.substring(1, token.length() - 1);
+    }
+    try {
+      var number = new BigDecimal(token);
+      var integer = number.toBigIntegerExact();
+      if (integer.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0 && integer.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0) {
+        return integer.intValueExact();
+      }
+      return integer.longValueExact();
+    } catch (ArithmeticException e) {
+      return Double.valueOf(token);
+    } catch (NumberFormatException e) {
+      throw new RuntimeException("Unexpected token: " + token);
     }
   }
 
@@ -67,46 +99,14 @@ public class JsonParser {
     throw new RuntimeException("Unexpected end of JSON");
   }
 
-  private Object parseValue(String token, JsonScanner scanner) throws IOException {
-    if (token == null) {
+  private void parseColon(JsonScanner scanner) throws IOException {
+    if (!scanner.hasNext()) {
       throw new RuntimeException("Unexpected end of JSON");
     }
-    if ("[".equals(token)) {
-      return parseList(scanner);
-    }
-    if ("{".equals(token)) {
-      return parseObject(scanner);
-    }
-    if ("null".equals(token)) {
-      return null;
-    }
-    if ("true".equals(token)) {
-      return true;
-    }
-    if ("false".equals(token)) {
-      return false;
-    }
-    if (token.startsWith("\"") && token.endsWith("\"")) {
-      return token.substring(1, token.length() - 1);
-    }
-    try {
-      var number = new BigDecimal(token);
-      var integer = number.toBigIntegerExact();
-      if (integer.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0 && integer.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0) {
-        return integer.intValueExact();
-      }
-      return integer.longValueExact();
-    } catch (ArithmeticException e) {
-      return Double.valueOf(token);
-    } catch (NumberFormatException e) {
-      throw new RuntimeException("Unexpected token: " + token);
-    }
-  }
-
-  public Object parse(Reader input) throws IOException {
-    var scanner = new JsonScanner(input);
     var token = scanner.scan();
-    return parseValue(token, scanner);
+    if (!":".equals(token)) {
+      throw new RuntimeException("Colon expected: " + token);
+    }
   }
 }
 
