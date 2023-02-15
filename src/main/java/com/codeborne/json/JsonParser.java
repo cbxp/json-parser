@@ -6,6 +6,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.function.Predicate.not;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -17,7 +22,9 @@ public class JsonParser {
 
   public Object parse(Reader input) throws IOException, JsonParseException {
     try (BufferedReader reader = new BufferedReader(input)) {
-      String line = reader.readLine().trim();
+      String line = reader.lines()
+          .map(String::trim)
+          .collect(Collectors.joining());
       if ("null".equals(line)) return null;
       return "true".equals(line);
     }
