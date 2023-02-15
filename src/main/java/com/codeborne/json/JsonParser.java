@@ -2,12 +2,9 @@ package com.codeborne.json;
 
 import org.intellij.lang.annotations.Language;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-
-import static java.lang.Integer.valueOf;
 
 /**
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
@@ -19,21 +16,37 @@ public class JsonParser {
 
     public Object parse(Reader input) throws IOException {
         Object result = null;
-        Character ch;
-
-        input.mark(1);
-        ch = read(input);
+        Character ch = peek(input);
 
         if (ch != null) {
-            if (ch == '"') {
-                result = readString(input, '"');
+            if (ch == '{' || ch == '[') {
+                // TODO
             } else {
-                input.reset();
-                result = readNumberOrNull(input, null);
+                result = readValue(input);
             }
         }
 
         return result;
+    }
+
+    public Object readValue(Reader input) throws IOException {
+        Character ch = peek(input);
+
+        if (ch == '"') {
+            input.read();
+            return readString(input, '"');
+        } else {
+            String string = readString(input, null);
+            if (string.equals("null")) {
+                return null;
+            } else if (string.equals("true")) {
+                return true;
+            } else if (string.equals("false")) {
+                return false;
+            } else {
+                return Integer.valueOf(string);
+            }
+        }
     }
 
     public String readString(Reader input, Character untilChar) throws IOException {
@@ -50,17 +63,15 @@ public class JsonParser {
         return stringBuilder.toString();
     }
 
-    public Integer readNumberOrNull(Reader input, Character untilChar) throws IOException {
-        String string = readString(input, untilChar);
-        if (string.equals("null")) {
-            return null;
-        } else {
-            return valueOf(string);
-        }
-    }
-
     public Character read(Reader input) throws IOException {
         int read = input.read();
         return read == -1 ? null : (char) read;
+    }
+
+    public Character peek(Reader input) throws IOException {
+        input.mark(1);
+        Character ch = read(input);
+        input.reset();
+        return ch;
     }
 }
