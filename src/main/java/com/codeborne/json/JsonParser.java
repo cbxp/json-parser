@@ -13,7 +13,7 @@ import org.intellij.lang.annotations.Language;
  */
 public class JsonParser {
 
-  private static final List<Parser> PARSERS = List.of(new NullParser(), new BooleanParser(), new NumberParser(), new StringParser());
+  private static final List<Parser> PARSERS = List.of(new NullParser(), new BooleanParser(), new NumberParser(), new StringParser(), new ObjectParser());
 
   public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
     return parse(new StringReader(input));
@@ -39,10 +39,6 @@ public class JsonParser {
 
   private boolean isEOF(int chr) {
     return chr == -1;
-  }
-
-  private boolean isWhitespace(int chr) {
-    return Character.isWhitespace(chr);
   }
 
 }
