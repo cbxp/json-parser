@@ -15,8 +15,8 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
 }
 
 tasks.withType<JavaCompile> {
@@ -25,7 +25,7 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "15"
         freeCompilerArgs += "-opt-in=kotlin.ExperimentalStdlibApi"
     }
 }
