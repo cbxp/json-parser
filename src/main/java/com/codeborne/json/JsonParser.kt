@@ -21,8 +21,8 @@ class JsonParser {
                 text.isLong() -> return text.toLong()
                 text.isDouble() -> return text.toDouble()
                 text.isBoolean() -> return text.toBoolean()
-                text == "{}" -> return mapOf<String, String>()
                 text.isList() -> return text.parseList()
+                text.isObject() -> return text.parseObject()
                 else -> return text.replace("\"", "")
             }
         }
@@ -42,5 +42,14 @@ class JsonParser {
         val listContent = this.replace("[", "").replace("]", "")
         if (listContent.isEmpty()) return listOf()
         return listContent.split(", ").map { parse(it) }
+    }
+
+    private fun String.isObject() = this.startsWith("{") && this.endsWith("}")
+
+    private fun String.parseObject(): Map<Any?, Any?> {
+        val content = this.replace("{", "").replace("}", "")
+        if (content.isEmpty()) return mapOf()
+        val entries = content.split(":").map { it.trim() }
+        return mapOf(parse(entries[0]) to parse(entries[1]))
     }
 }
