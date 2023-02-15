@@ -1,16 +1,15 @@
-package com.codeborne.json.assertions;
+package com.codeborne.json.assertions
 
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.InputStreamReader
+import java.io.Reader
+import java.nio.charset.StandardCharsets
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+object JsonAssertions {
+    fun assertThat(parsedJson: Any?): JsonAssert {
+        return JsonAssert(parsedJson)
+    }
 
-public class JsonAssertions {
-  public static JsonAssert assertThat(Object parsedJson) {
-    return new JsonAssert(parsedJson);
-  }
-
-  static Reader file(String fileName) {
-    return new InputStreamReader(JsonAssertions.class.getResourceAsStream('/' + fileName), UTF_8);
-  }
+    fun file(fileName: String): Reader {
+        return InputStreamReader(JsonAssertions::class.java.getResourceAsStream("/$fileName"), StandardCharsets.UTF_8)
+    }
 }

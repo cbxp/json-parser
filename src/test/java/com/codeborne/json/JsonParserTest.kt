@@ -1,14 +1,14 @@
-package com.codeborne.json;
+package com.codeborne.json
 
-import org.junit.jupiter.api.Test;
-
-import static com.codeborne.json.assertions.JsonAssertions.assertThat;
+import com.codeborne.json.assertions.JsonAssertions
+import org.junit.jupiter.api.Test
 
 class JsonParserTest {
-  private final JsonParser parser = new JsonParser();
-
-  @Test
-  void plainNull() throws Exception {
-    assertThat(parser.parse("null")).isNull();
-  }
+    private val parser = JsonParser()
+    
+    @Test
+    @Throws(Exception::class)
+    fun plainNull() {
+        JsonAssertions.assertThat(parser.parse("null")).isNull()
+    }
 }

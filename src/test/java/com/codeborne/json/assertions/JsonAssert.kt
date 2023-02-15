@@ -1,54 +1,40 @@
-package com.codeborne.json.assertions;
+package com.codeborne.json.assertions
 
-import org.assertj.core.api.AbstractObjectAssert;
+import org.assertj.core.api.AbstractObjectAssert
+import org.assertj.core.api.Assertions
 
-import java.util.List;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-public class JsonAssert extends AbstractObjectAssert<JsonAssert, Object> {
-  public JsonAssert(Object json) {
-    super(json, JsonAssert.class);
-  }
-
-  public JsonAssert isListOfLength(int expectedLength) {
-    isNotNull();
-    assertThat((List<?>) actual).hasSize(expectedLength);
-    return this;
-  }
-
-  public JsonAssert extractingFromJson(Object... jsonPath) {
-    isNotNull();
-    Object value = actual;
-    for (Object step : jsonPath) {
-      if (step instanceof String) {
-        value = getFromMap(value, (String) step);
-      }
-      else if (step instanceof Integer) {
-        value = getFromList(value, (Integer) step);
-      }
-      else {
-        throw new IllegalArgumentException("Json path element can be String or Integer");
-      }
+class JsonAssert(json: Any?) : AbstractObjectAssert<JsonAssert?, Any?>(json, JsonAssert::class.java) {
+    fun isListOfLength(expectedLength: Int): JsonAssert {
+        isNotNull()
+        Assertions.assertThat(actual as List<*>?).hasSize(expectedLength)
+        return this
     }
-    return new JsonAssert(value);
-  }
 
-  private static Object getFromMap(Object value, String step) {
-    if (!(value instanceof Map)) {
-      throw new IllegalArgumentException(String.format("Cannot extract json element %s from %s", step, value));
+    fun extractingFromJson(vararg jsonPath: Any?): JsonAssert {
+        isNotNull()
+        var value = actual
+        for (step in jsonPath) {
+            value = if (step is String) {
+                getFromMap(value, step)
+            } else if (step is Int) {
+                getFromList(value, step)
+            } else {
+                throw IllegalArgumentException("Json path element can be String or Integer")
+            }
+        }
+        return JsonAssert(value)
     }
-    @SuppressWarnings("unchecked")
-    Map<String, Object> jsonObject = (Map<String, Object>) value;
-    return jsonObject.get(step);
-  }
 
-  private static Object getFromList(Object value, int step) {
-    if (!(value instanceof List<?>)) {
-      throw new IllegalArgumentException(String.format("Cannot extract json element %s from %s", step, value));
+    companion object {
+        private fun getFromMap(value: Any?, step: String): Any? {
+            require(value is Map<*, *>) { String.format("Cannot extract json element %s from %s", step, value) }
+            val jsonObject = value as Map<String, Any>
+            return jsonObject[step]
+        }
+
+        private fun getFromList(value: Any?, step: Int): Any {
+            require(value is List<*>) { String.format("Cannot extract json element %s from %s", step, value) }
+            return value[step]!!
+        }
     }
-    List<?> jsonObject = (List<?>) value;
-    return jsonObject.get(step);
-  }
 }
