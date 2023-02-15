@@ -15,6 +15,16 @@ class JsonParserTest {
   }
 
   @Test
+  void plainTrue() throws Exception {
+    assertThat(parser.parse("true")).isEqualTo(true);
+  }
+  @Test
+
+  void plainFalse() throws Exception {
+    assertThat(parser.parse("false")).isEqualTo(false);
+  }
+
+  @Test
   void ignoreWhitespace_space() throws Exception {
     assertThat(parser.parse(" null ")).isNull();
   }
