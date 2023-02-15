@@ -38,4 +38,9 @@ class JsonParserTest {
   void valueSimpleString() throws IOException, JsonParseException {
     assertThat(parser.parse("\"string\"")).isEqualTo("string");
   }
+
+  @Test
+  void valueStringWithSpaces() throws IOException, JsonParseException {
+    assertThat(parser.parse("\" string string \"")).isEqualTo(" string string ");
+  }
 }
