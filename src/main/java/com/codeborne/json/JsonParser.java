@@ -1,6 +1,8 @@
 package com.codeborne.json;
 
 import org.intellij.lang.annotations.Language;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -15,31 +17,86 @@ public class JsonParser {
     }
 
     public Object parse(Reader input) throws IOException {
-        StringBuffer buffer = new StringBuffer();
+        StringBuffer valueBuffer = new StringBuffer();
+        boolean readingValue = false;
+        String valueType = "";
         while (true) {
             int character = input.read();
-            if (character == -1) {
+            if (character == -1) { // end of string
                 break;
             }
-            buffer.append((char) character);
+            if (isWhiteSpace(character)) {
+                if (readingValue) {
+                    readingValue = false;
+                }
+            } else {
+                if (readingValue) {
+                    valueBuffer.append((char) character);
+                } else {
+                    valueType = setValueType(character);
+                    readingValue = true;
+                    valueBuffer.append((char) character);
+                }
+            }
         }
-        String s = buffer.toString();
-        if (s.equals("null")) {
-            return null;
-        }
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            // do nothing
-        }
+//        System.out.println("buffer content " + valueBuffer.toString());
+        return convertValueToObject(valueBuffer, valueType);
+    }
 
-        if (s.equalsIgnoreCase("true")) {
-            return true;
+    @NotNull
+    private String setValueType(int character) {
+        String valueType;
+        if (isStartOfNull(character)) {
+            valueType = "null";
+        } else if (isStartOfBoolean(character)) {
+            valueType = "boolean";
+        } else if (isStartOfNumber(character)) {
+            valueType = "number";
+        } else if (isStartOfString(character)) {
+            valueType = "string";
+        } else {
+            throw new RuntimeException("unknown value start");
         }
-        if (s.equalsIgnoreCase("false")) {
-            return false;
+        return valueType;
+    }
+
+    @Nullable
+    private static Object convertValueToObject(StringBuffer valueBuffer, String valueType) {
+        switch (valueType) {
+            case "null":
+                return null;
+            case "boolean":
+                return Boolean.parseBoolean(valueBuffer.toString());
+            case "number":
+                return Integer.parseInt(valueBuffer.toString());
+            case "string":
+                return valueBuffer.toString().substring(1, valueBuffer.length() - 2);
+            default:
+                throw new RuntimeException("not yet implemented");
         }
-        return s;
+    }
+
+    private boolean isStartOfString(int character) {
+        String s = String.valueOf((char) character);
+        return s.equals("\"");
+    }
+
+    private boolean isStartOfNumber(int character) {
+        String s = String.valueOf((char) character);
+        return s.equalsIgnoreCase("-") || s.matches("\\d");
+    }
+
+    private boolean isStartOfBoolean(int character) {
+        String s = String.valueOf((char) character);
+        return s.equalsIgnoreCase("t") || s.equalsIgnoreCase("f");
+    }
+
+    private boolean isWhiteSpace(int character) {
+        return (char) character == ' ';
+    }
+
+    private boolean isStartOfNull(int character) {
+        return (char) character == 'n';
     }
 }
 

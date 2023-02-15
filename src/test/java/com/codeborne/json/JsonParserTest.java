@@ -1,5 +1,6 @@
 package com.codeborne.json;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.json.assertions.JsonAssertions.assertThat;
@@ -14,7 +15,9 @@ class JsonParserTest {
 
     @Test
     void valueString() throws Exception {
-        assertThat(parser.parse("abc")).isEqualTo("abc");
+        assertThat(parser.parse("""
+                 "abc"
+                """)).isEqualTo("abc");
     }
 
     @Test
@@ -33,5 +36,13 @@ class JsonParserTest {
         assertThat(parser.parse("false")).isEqualTo(false);
         assertThat(parser.parse("False")).isEqualTo(false);
         assertThat(parser.parse("FaLse")).isEqualTo(false);
+    }
+
+    @Test
+    @Disabled
+    void ignoresSurroundingWhitespaces() throws Exception {
+        assertThat(parser.parse("true ")).isEqualTo(true);
+        assertThat(parser.parse(" 123")).isEqualTo(123);
+        assertThat(parser.parse(" abc   ")).isEqualTo("abc");
     }
 }
