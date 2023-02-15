@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,14 +33,19 @@ public class JsonParser {
       if ("null".equals(line)) {
         return null;
       }
-      else if (line.startsWith("\"") && line.endsWith("\"")) {
-        return unescape(line.substring(1, line.length()-1));
-      }
       else if ("true".equals(line)) {
         return true;
       }
       else if ("false".equals(line)) {
         return false;
+      }
+      else if (line.startsWith("\"") && line.endsWith("\"")) {
+        return unescape(line.substring(1, line.length()-1));
+      }
+      else if (line.startsWith("[") && line.endsWith("]")) {
+        return Arrays.stream(line.substring(1, line.length()-1).split(","))
+            .filter(not(String::isEmpty))
+            .collect(Collectors.toList());
       }
       else {
         throw new JsonParseException("Invalid JSON", -1);
