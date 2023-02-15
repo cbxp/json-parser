@@ -28,6 +28,8 @@ public class JsonParser {
                         return false;
                     case "null" :
                         return null;
+                    case "\"\"" :
+                        return "";
                 }
                 if (checkIfInteger(line)) return Integer.valueOf(line);
             }
