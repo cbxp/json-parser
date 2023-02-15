@@ -11,14 +11,26 @@ import java.io.StringReader;
  * <a href="https://www.json.org/json-en.html">JSON specification</a>
  */
 public class JsonParser {
-  public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
-    return parse(new StringReader(input));
-  }
+    public Object parse(@Language("JSON") String input) throws IOException, JsonParseException {
+        return parse(new StringReader(input));
+    }
 
-  public Object parse(Reader input) throws IOException, JsonParseException {
-    // TODO implement me
-    return null;
-  }
+    public Object parse(Reader input) throws IOException, JsonParseException {
+        try (var br = new BufferedReader(input)) {
+            String line = br.readLine();
+            if (line != null) {
+                switch (line) {
+                    case "true":
+                        return true;
+                    case "false":
+                        return false;
+                    default:
+                        throw new JsonParseException("Invalid JSON format", 0);
+                }
+            }
+        }
+        return null;
+    }
 }
 
 /*
