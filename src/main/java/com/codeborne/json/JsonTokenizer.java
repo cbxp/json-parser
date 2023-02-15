@@ -30,6 +30,8 @@ public class JsonTokenizer {
     try {
       char symbol = nextSymbol(true);
 
+      while (Character.isWhitespace(symbol)) symbol = nextSymbol(true);
+
       if (symbol == '{') return new JsonToken(TokenType.OBJ_START);
       if (symbol == '}') return new JsonToken(TokenType.OBJ_CLOSING);
       if (symbol == ':') return new JsonToken(TokenType.COLON);
@@ -79,6 +81,14 @@ public class JsonTokenizer {
     public JsonToken(JsonTokenizer.TokenType type) {
       this.type = type;
       this.value = null;
+    }
+
+    @Override
+    public String toString() {
+      return "JsonToken{" +
+          "type=" + type +
+          ", value='" + value + '\'' +
+          '}';
     }
   }
 

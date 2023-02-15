@@ -1,5 +1,6 @@
 package com.codeborne.json;
 
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringReader;
@@ -63,4 +64,20 @@ class JsonTokenizerTest {
     }
   }
 
+  @Test
+  void objectWithProperty() {
+    @Language("JSON") String json = """
+        {
+          "key":"value"
+        }
+        """;
+    JsonTokenizer tokenizer = new JsonTokenizer(new StringReader(json));
+
+    assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(OBJ_START));
+    assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(VALUE, "key"));
+    assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(COLON));
+    assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(VALUE, "value"));
+    assertThat(tokenizer.nextToken()).isEqualTo(new JsonToken(OBJ_CLOSING));
+    assertThat(tokenizer.nextToken()).isNull();
+  }
 }
