@@ -18,8 +18,8 @@ public class JsonParser {
   public Object parse(Reader input) throws IOException, JsonParseException {
     try (BufferedReader reader = new BufferedReader(input)) {
       String line = reader.readLine();
-      if (line.equals("null")) return null;
-      return line.equals("true");
+      if ("null".equals(line)) return null;
+      return "true".equals(line);
     }
   }
 }
