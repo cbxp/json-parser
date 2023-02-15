@@ -1,5 +1,6 @@
 package com.codeborne.json;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -28,6 +29,13 @@ class JsonParserTest {
   @Test
   void plainString() throws Exception{
     assertThat(parser.parse("\"foo bar\"")).isEqualTo("foo bar");
+  }
+
+  @Test
+  void plain_invalid() {
+    assertThatThrownBy(() -> parser.parse("\""))
+        .isInstanceOf(JsonParseException.class)
+        .hasMessage("Invalid JSON");
   }
 
   @Test

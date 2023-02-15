@@ -25,11 +25,24 @@ public class JsonParser {
       String line = reader.lines()
           .map(String::trim)
           .collect(Collectors.joining());
-      if ("null".equals(line)) return null;
-      if (line.startsWith("\"") && line.endsWith("\"")) {
+      if (line.length() < 2) {
+        throw new JsonParseException("Invalid JSON", -1);
+      }
+      if ("null".equals(line)) {
+        return null;
+      }
+      else if (line.startsWith("\"") && line.endsWith("\"")) {
         return unescape(line.substring(1, line.length()-1));
       }
-      return "true".equals(line);
+      else if ("true".equals(line)) {
+        return true;
+      }
+      else if ("false".equals(line)) {
+        return false;
+      }
+      else {
+        throw new JsonParseException("Invalid JSON", -1);
+      }
     }
   }
 
