@@ -1,0 +1,22 @@
+{
+  "name": {
+    "first": "Tom",
+    "last": "La'Cruise"
+  },
+  "occupation": "Actor",
+  "age": 56,
+  "birthYear": 1963,
+  "date": 3,
+  "month": 7,
+  "weight": 67.5,
+  "wife": null,
+  "hasChildren": true,
+  "children": [
+    "Suri",
+    "Isabella Jane",
+    "Connor"
+  ],
+  "Born At": "Syracuse, NY",
+  "Birthdate": "July 3 1962",
+  "photo": "https://jsonformatter.org/img/tom-cruise.jpg"
+}
