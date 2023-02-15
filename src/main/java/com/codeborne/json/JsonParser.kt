@@ -23,7 +23,7 @@ class JsonParser {
                 text.isBoolean() -> return text.toBoolean()
                 text.isList() -> return text.parseList()
                 text.isObject() -> return text.parseObject()
-                else -> return text.unescape().replaceLineBreaks().replace("\"", "")
+                else -> return text.unescape()
             }
         }
     }
@@ -53,11 +53,14 @@ class JsonParser {
         return mapOf(parse(entries[0]) to parse(entries[1]))
     }
 
-    private fun String.unescape() = this.unescapeUnicode()
+    private fun String.unescape() = this
+        .unescapeUnicode()
+        .unescapeLineBreaks()
+        .replace("\"", "")
 
     private fun String.unescapeUnicode() = replace("\\\\u([0-9A-Fa-f]{4})".toRegex()) {
         String(Character.toChars(it.groupValues[1].toInt(radix = 16)))
     }
 
-    private fun String.replaceLineBreaks() = this.replace("\\n", "\n").replace("\\r", "\r")
+    private fun String.unescapeLineBreaks() = this.replace("\\n", "\n").replace("\\r", "\r")
 }
